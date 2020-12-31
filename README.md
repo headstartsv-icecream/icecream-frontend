@@ -1,2 +1,3 @@
-# icecream-frontend
+# Icecream Front-End
+
 Front-End
