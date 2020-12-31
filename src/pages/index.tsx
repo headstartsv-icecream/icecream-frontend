@@ -1,4 +1,5 @@
 import { Button, message } from 'antd'
+import MaterialButton from '@material-ui/core/Button'
 import PageLayout from 'src/components/layouts/PageLayout'
 
 import PageTitle from 'src/components/layouts/PageTitle'
@@ -28,6 +29,12 @@ const Description = styled.p`
   font-size: 1.5rem;
 `
 
+const FlexContainer = styled.div`
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 150px;
+`
+
 function handleClickTestButton() {
   return message.info('With Ant-Design')
 }
@@ -44,9 +51,14 @@ function HomePage() {
           Get started by editing <code>src/pages/index.tsx</code>
         </Description>
 
-        <Button onClick={handleClickTestButton} type="primary">
-          Test Button
-        </Button>
+        <FlexContainer>
+          <Button onClick={handleClickTestButton} type="primary">
+            Test Button
+          </Button>
+          <MaterialButton variant="contained" color="primary">
+            Hello World
+          </MaterialButton>
+        </FlexContainer>
       </PageLayout>
     </PageTitle>
   )

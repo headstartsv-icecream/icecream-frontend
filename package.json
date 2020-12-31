@@ -20,6 +20,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.2",
     "antd": "^4.9.4",
     "next": "^10.0.4",
     "react": "^17.0.1",
