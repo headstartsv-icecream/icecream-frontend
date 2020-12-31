@@ -1,8 +1,0 @@
-_N_E=(window.webpackJsonp_N_E=window.webpackJsonp_N_E||[]).push([[6],{0:function(e,t,n){n("74v/"),e.exports=n("nOHt")},"74v/":function(e,t,n){(window.__NEXT_P=window.__NEXT_P||[]).push(["/_app",function(){return n("hUgY")}])},SU1z:function(e,t,n){},TpwP:function(e,t,n){},hUgY:function(e,t,n){"use strict";n.r(t);var r=n("rePB"),o=n("nKUr"),c=n("g4pe"),i=n.n(c),p=n("vOnD");n("SU1z"),n("TpwP");function s(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),n.push.apply(n,r)}return n}function O(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?s(Object(n),!0).forEach((function(t){Object(r.a)(e,t,n[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):s(Object(n)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))}))}return e}const a=p.a`
-  html,
-  body,
-  #root {
-    padding: 0;
-    font-size: 16px;
-  }
-`;t.default=function({Component:e,pageProps:t}){return Object(o.jsxs)(o.Fragment,{children:[Object(o.jsxs)(i.a,{children:[Object(o.jsx)("meta",{name:"viewport",content:"initial-scale=1.0, width=device-width, minimal-ui"}),Object(o.jsx)("link",{rel:"icon",href:"/favicon.ico"})]}),Object(o.jsx)(a,{}),Object(o.jsx)(e,O({},t))]})}}},[[0,0,1,4,2,3]]]);
