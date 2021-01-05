@@ -41,7 +41,7 @@ function handleClickTestButton() {
 
 function HomePage() {
   return (
-    <PageTitle title="Icecream">
+    <PageTitle title="Icecream Music">
       <PageLayout>
         <Title>
           Welcome to <StyledA href="https://www.google.com/">Icecream Front-End!</StyledA>
