@@ -1,4 +1,9 @@
+/* eslint-disable no-constant-condition */
 import Link from 'next/link'
+import IcecreamLogo from './atoms/IcecreamLogo'
+import LoginButton from './LoginButton'
+import LogoutButton from './LogoutButton'
+import SearchInput from './SearchInput'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
@@ -7,12 +12,15 @@ type Props = {}
 function Navigation({}: Props) {
   return (
     <nav>
-      <Link href="projects">
-        <a href="projects">Projects</a>
+      <IcecreamLogo />
+      <Link href="charts">
+        <a href="charts">차트</a>
       </Link>
-      <Link href="about">
-        <a href="about">About</a>
+      <Link href="my">
+        <a href="my">내 라이브러리</a>
       </Link>
+      <SearchInput />
+      {true ? <LoginButton /> : <LogoutButton />}
     </nav>
   )
 }
