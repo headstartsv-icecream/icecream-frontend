@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import RecordRTC, { StereoAudioRecorder } from 'recordrtc'
 
 async function recordMic() {
   /* const chunks = []
@@ -29,23 +30,6 @@ async function recordMic() {
   */
 }
 
-async function getDetectedMusicInfo(body: string) {
-  try {
-    const response = await fetch('https://shazam.p.rapidapi.com/songs/detect', {
-      method: 'POST',
-      headers: {
-        'content-type': 'text/plain',
-        'x-rapidapi-key': process.env.SHAZAM_API_KEY ?? '',
-        'x-rapidapi-host': 'shazam.p.rapidapi.com',
-      },
-      body,
-    })
-    return await response.json()
-  } catch (error) {
-    console.error(error)
-  }
-}
-
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
@@ -59,6 +43,7 @@ function Recorder({}: Props) {
   const audioChunks = useRef<Blob[]>([])
   const audioRecorder = useRef<MediaRecorder | null>(null)
   const audioStream = useRef<MediaStream | null>(null)
+  // const recorder = useRef<RecordRTC | null>(null)
 
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null)
   const [recordedData, setRecordedData] = useState<Float32Array[]>([])
@@ -75,8 +60,18 @@ function Recorder({}: Props) {
   }, [])
 
   async function startRecording() {
-    const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true })
-    audioRecorder.current = new MediaRecorder(audioStream)
+    /* const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    const recorder = new RecordRTC(stream, {
+      type: 'audio',
+      mimeType: 'audio/webm;codecs=pcm',
+      sampleRate: 44100,
+      desiredSampRate: 44100,
+      numberOfAudioChannels: 1,
+    })
+    recorder.startRecording() */
+    //
+    /* const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    audioRecorder.current = new MediaRecorder(audioStream, { mimeType: 'audio/webm;codecs=pcm' })
     audioRecorder.current.ondataavailable = ({ data }: BlobEvent) => {
       audioChunks.current.push(data)
     }
@@ -88,7 +83,7 @@ function Recorder({}: Props) {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
       reader.onload = async () => {
-        console.log(reader.result?.toString().slice(35) ?? '')
+        console.log(reader.result?.toString())
         const body = await getDetectedMusicInfo(reader.result?.toString().slice(35) ?? '')
         console.log(body)
       }
@@ -106,10 +101,22 @@ function Recorder({}: Props) {
     audioRecorder.current.start()
 
     const audioContext = new window.AudioContext({ sampleRate: 44100 })
-    const newAudioInput = audioContext.createMediaStreamSource(audioStream)
+    const newAudioInput = audioContext.createMediaStreamSource(audioStream) */
   }
 
-  function stopRecording() {
+  async function stopRecording() {
+    /* if (recorder.current) {
+      recorder.current.stopRecording()
+      const blob = recorder.current.getBlob()
+
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      reader.onload = async () => {
+        console.log(reader.result)
+        // const body = await getDetectedMusicInfo(reader.result?.toString().slice(35) ?? '')
+        // console.log(body)
+      }
+    } */
     if (audioRecorder.current?.state !== 'inactive') {
       audioRecorder.current?.stop()
       audioStream.current?.getTracks().forEach((track) => track.stop())
@@ -124,7 +131,6 @@ function Recorder({}: Props) {
 
       <button onClick={startRecording}>녹음</button>
       <button onClick={stopRecording}>정지</button>
-      <button onClick={() => getDetectedMusicInfo('')}>확인</button>
     </div>
   )
 }
