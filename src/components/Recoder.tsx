@@ -35,7 +35,7 @@ async function getDetectedMusicInfo(body: string) {
       method: 'POST',
       headers: {
         'content-type': 'text/plain',
-        'x-rapidapi-key': 'c80889ad42mshe6b09c14b5f2503p1574dajsn50224cf646a9',
+        'x-rapidapi-key': process.env.SHAZAM_API_KEY ?? '',
         'x-rapidapi-host': 'shazam.p.rapidapi.com',
       },
       body,
