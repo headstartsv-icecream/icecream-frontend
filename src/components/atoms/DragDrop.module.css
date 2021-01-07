@@ -1,0 +1,33 @@
+.dragDrop {
+  margin: 2rem;
+  text-align: center;
+}
+
+.dragDropZone {
+  padding: 2rem;
+  text-align: center;
+  background: rgb(124, 185, 201);
+  border-radius: 0.5rem;
+  box-shadow: 5px 5px 10px #c0c0c0;
+  opacity: 1;
+}
+
+.p {
+  color: #fff;
+}
+
+.insideDragDropZone {
+  padding: 2rem;
+  text-align: center;
+  background: rgba(124, 185, 201, 0.548);
+  border-radius: 0.5rem;
+  box-shadow: 5px 5px 10px #c0c0c0;
+  opacity: 0.7;
+}
+
+.dropped-files li {
+  color: #07f;
+  padding: 3px;
+  text-align: left;
+  font-weight: bold;
+}
