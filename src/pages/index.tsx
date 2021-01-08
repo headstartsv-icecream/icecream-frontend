@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import DragDrop from 'src/components/atoms/DragDrop'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
@@ -30,15 +30,6 @@ async function getDetectedMusicInfo(body: string) {
 
 function HomePage() {
   const [file, setFile] = useState<File | null>(null)
-
-  useEffect(() => {
-    if (file) {
-      ;(async () => {
-        const base64Encoding = await getBase64EncodingFrom(file)
-        console.log(base64Encoding)
-      })()
-    }
-  }, [file])
 
   async function handleClickMusicDetectionButton() {
     if (file) {

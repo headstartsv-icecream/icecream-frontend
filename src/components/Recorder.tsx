@@ -1,65 +1,50 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useReactMediaRecorder } from 'react-media-recorder'
 import RecordRTC, { StereoAudioRecorder } from 'recordrtc'
-
-async function recordMic() {
-  /* const chunks = []
-
-  try {
-    audioRecorder = (e) => {
-      playRecording.appendChild(clipContainer)
-
-      audio.controls = true
-      const blob = new Blob(chunks, {
-        type: 'audio/ogg codecs=opus',
-      })
-      chunks = []
-      const audioURL = URL.createObjectURL(blob)
-      audio.src = audioURL
-    }
-
-    audioRecorder = (e) => {
-      chunks.push(e.data)
-    }
-  } catch (err) {
-    console.log('The following error occurred: ' + err)
-  }
-
-  return 1
-  */
-}
+import { getBase64EncodingFrom } from 'src/utils/commons'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
 // eslint-disable-next-line no-empty-pattern
 function Recorder({}: Props) {
-  /* const { status, startRecording, stopRecording, mediaBlobUrl } = useReactaudioRecorder({
-    audio: true,
-    blobPropertyBag: { type: 'audio/raw' },
-  }) */
-
-  const audioChunks = useRef<Blob[]>([])
   const audioRecorder = useRef<MediaRecorder | null>(null)
   const audioStream = useRef<MediaStream | null>(null)
   // const recorder = useRef<RecordRTC | null>(null)
 
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null)
-  const [recordedData, setRecordedData] = useState<Float32Array[]>([])
+  // const [audioContext, setAudioContext] = useState<AudioContext | null>(null)
+  // const [recordedData, setRecordedData] = useState<Float32Array[]>([])
 
-  useEffect(() => {
-    ;(async () => {
-      try {
-        /* const response = await detectMusic('base64 encoding')
-        console.log(response) */
-      } catch (error) {
-        console.log(error)
-      }
-    })()
-  }, [])
+  // const [gumStream, setGumStrem] = useState()
 
   async function startRecording() {
+    // StackOverflow: https://stackoverflow.com/questions/59180979/get-16-bit-output-audio-using-audiocontext
+    /* console.log('recordButton clicked')
+
+    const audioContext = new AudioContext({ sampleRate: 44100 })
+
+    const constraints = {
+      audio: true,
+      video: false,
+    }
+
+    const audioStream = await navigator.mediaDevices.getUserMedia({
+      audio: true , video: false,
+    })
+
+    console.log('getUserMedia() success, stream created, initializing Recorder.js ...')
+    
+    gumStream = audioStream
+    
+    input = audioContext.createMediaStreamSource(stream)
+    
+    rec = new Recorder(input, { numChannels: 1 })
+    // start the recording process
+    rec.record()
+    console.log('Recording started') */
+    // RecordRTC
     /* const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
     const recorder = new RecordRTC(stream, {
       type: 'audio',
@@ -69,60 +54,43 @@ function Recorder({}: Props) {
       numberOfAudioChannels: 1,
     })
     recorder.startRecording() */
-    //
-    /* const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true })
-    audioRecorder.current = new MediaRecorder(audioStream, { mimeType: 'audio/webm;codecs=pcm' })
+
+    // const audioContext = new window.AudioContext({ sampleRate: 44100 })
+    // const newAudioInput = audioContext.createMediaStreamSource(audioStream)
+    console.log('startRecording')
+    audioStream.current = await window.navigator.mediaDevices.getUserMedia({ audio: true })
+    audioRecorder.current = new MediaRecorder(audioStream.current)
     audioRecorder.current.ondataavailable = ({ data }: BlobEvent) => {
-      audioChunks.current.push(data)
+      setObjectURL((window.URL ?? window.webkitURL).createObjectURL(new Blob([data])))
     }
-    audioRecorder.current.onstop = async () => {
-      const [chunk] = audioChunks.current
-      const blobProperty: BlobPropertyBag = Object.assign({ type: chunk.type })
-      const blob = new Blob(audioChunks.current, blobProperty)
-
-      const reader = new FileReader()
-      reader.readAsDataURL(blob)
-      reader.onload = async () => {
-        console.log(reader.result?.toString())
-        const body = await getDetectedMusicInfo(reader.result?.toString().slice(35) ?? '')
-        console.log(body)
-      }
-
-      // data:audio/webm;codecs=opus;base64,
-      // const url = URL.createObjectURL(blob)
-      // setStatus('stopped')
-      // setMediaBlobUrl(url)
-      // onStop(url, blob)
-    }
-    audioRecorder.current.onerror = () => {
-      // setError('NO_RECORDER')
-      // setStatus('idle')
+    audioRecorder.current.onerror = (e: MediaRecorderErrorEvent) => {
+      console.error('audioRecoder onError', e)
     }
     audioRecorder.current.start()
-
-    const audioContext = new window.AudioContext({ sampleRate: 44100 })
-    const newAudioInput = audioContext.createMediaStreamSource(audioStream) */
   }
+
+  const [objectURL, setObjectURL] = useState('')
 
   async function stopRecording() {
-    /* if (recorder.current) {
-      recorder.current.stopRecording()
-      const blob = recorder.current.getBlob()
-
-      const reader = new FileReader()
-      reader.readAsDataURL(blob)
-      reader.onload = async () => {
-        console.log(reader.result)
-        // const body = await getDetectedMusicInfo(reader.result?.toString().slice(35) ?? '')
-        // console.log(body)
+    console.log('stopRecording')
+    if (audioRecorder.current && audioStream.current) {
+      if (audioRecorder.current.state !== 'inactive') {
+        audioRecorder.current.stop()
+        audioStream.current.getTracks().forEach((track) => track.stop())
       }
-    } */
-    if (audioRecorder.current?.state !== 'inactive') {
-      audioRecorder.current?.stop()
-      audioStream.current?.getTracks().forEach((track) => track.stop())
-      audioChunks.current = []
     }
   }
+
+  /* const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
+    audio: true,
+    blobPropertyBag: { type: 'application/octet-stream' },
+  }) */
+
+  useEffect(() => {
+    console.log(objectURL)
+    // 여기까지 이해함
+    // console.log(window.navigator.mediaDevices.getUserMedia({ audio: true }))
+  }, [objectURL])
 
   return (
     <div>
@@ -131,6 +99,7 @@ function Recorder({}: Props) {
 
       <button onClick={startRecording}>녹음</button>
       <button onClick={stopRecording}>정지</button>
+      <audio src={objectURL} controls />
     </div>
   )
 }
