@@ -18,15 +18,15 @@ function Recorder({ setFile }: Props) {
 
   async function startRecording() {
     audioStream.current = await window.navigator.mediaDevices.getUserMedia({ audio: true })
-    // audioRecorder.current = new RecordRTC(audioStream.current, {
-    //   type: 'audio',
-    //   recorderType: StereoAudioRecorder,
-    //   disableLogs: true,
-    //   sampleRate: 44100,
-    //   desiredSampRate: 44100,
-    //   numberOfAudioChannels: 1,
-    // })
-    // audioRecorder.current.startRecording()
+    audioRecorder.current = new RecordRTC(audioStream.current, {
+      type: 'audio',
+      recorderType: StereoAudioRecorder,
+      disableLogs: true,
+      sampleRate: 44100,
+      desiredSampRate: 44100,
+      numberOfAudioChannels: 1,
+    })
+    audioRecorder.current.startRecording()
   }
 
   async function stopRecording() {
