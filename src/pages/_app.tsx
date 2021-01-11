@@ -13,11 +13,19 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+// 최대 120자
+const description = '지금 들리는 음악을 Icezam에서 검색해보세요.'
+
+// 최대 10개
+const keywords = '아이스잠, Icezam, 노래, 음악, 음악검색, MusicDetection'
+
 function IcecreamApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width, minimal-ui" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
         <link rel="icon" href="/favicon.ico" />
         <link
           rel="stylesheet"
