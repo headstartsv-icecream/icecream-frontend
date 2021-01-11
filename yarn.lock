@@ -8657,10 +8657,9 @@ readdirp@~3.5.0:
   dependencies:
     picomatch "^2.2.1"
 
-recordrtc@^5.6.1:
+"recordrtc@git+https://github.com/headstartsv-icecream/RecordRTC.git":
   version "5.6.1"
-  resolved "https://registry.yarnpkg.com/recordrtc/-/recordrtc-5.6.1.tgz#da876700fa149bbb230df7591a020e2c43de01c8"
-  integrity sha512-UU7Fd9IIuz60TPq4GgL1qtgo2mzEZWzPxEraNe32eo4/ndjKmuj715HB7W1k63G09teM1dXJYubPEmLkQ/lq5Q==
+  resolved "git+https://github.com/headstartsv-icecream/RecordRTC.git#11356b4545aae63bfa1f249eedf694b867de6dcd"
 
 regenerator-runtime@^0.13.4:
   version "0.13.7"
