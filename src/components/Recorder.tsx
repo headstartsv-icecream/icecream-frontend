@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react'
 import RecordRTC, { StereoAudioRecorder } from 'recordrtc'
-import { fetchDetectedMusicInfo, getBase64EncodingFrom, wait } from 'src/utils/commons'
+import {
+  downloadFile,
+  fetchDetectedMusicInfo,
+  getBase64EncodingFrom,
+  wait,
+} from 'src/utils/commons'
 import { mergeLeftRightBuffers } from 'src/utils/recordrtc'
 
 // Temporary Type
@@ -57,11 +62,10 @@ function Recorder({ setMusicInfo }: Props) {
       const base64Encoding = await getBase64EncodingFrom(audioBlob)
 
       console.log('Searching audio blob...')
-      const musicInfo = await fetchDetectedMusicInfo(base64Encoding)
+      const newMusicInfo = await fetchDetectedMusicInfo(base64Encoding)
 
-      console.log(musicInfo)
-      if (musicInfo.matches.length) {
-        setMusicInfo(musicInfo)
+      if (newMusicInfo.matches.length) {
+        setMusicInfo(newMusicInfo)
         break
       } else {
         audioRecorder.current.reset()
