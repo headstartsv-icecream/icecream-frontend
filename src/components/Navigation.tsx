@@ -13,11 +13,11 @@ function Navigation({}: Props) {
   return (
     <nav>
       <IcecreamLogo />
+      <Link href="myicezam">
+        <a href="myicezam">내 라이브러리</a>
+      </Link>
       <Link href="charts">
         <a href="charts">차트</a>
-      </Link>
-      <Link href="my">
-        <a href="my">내 라이브러리</a>
       </Link>
       <SearchInput />
       {true ? <LoginButton /> : <LogoutButton />}

@@ -3,7 +3,7 @@ type Props = {}
 
 // eslint-disable-next-line no-empty-pattern
 function SearchInput({}: Props) {
-  return <></>
+  return <input></input>
 }
 
 export default SearchInput
