@@ -12,6 +12,7 @@ const FlexContainer = styled.div`
 `
 
 function HomePage() {
+  const [musicInfo, setMusicInfo] = useState({})
   const [file, setFile] = useState<File | null>(null)
 
   async function handleClickMusicDetectionButton() {
@@ -25,9 +26,9 @@ function HomePage() {
   console.log(file)
 
   return (
-    <PageTitle title="Icezam - 음악을 검색하고, 다양한 차트와 노래 가사를 알아보는 공간">
+    <PageTitle title="Icezam - 음악을 검색하고, 다양한 사람들의 음악에 대한 반응을 알아보는 공간">
       <PageLayout>
-        <Recorder setFile={setFile} />
+        <Recorder setMusicInfo={setMusicInfo} />
         <DragDrop file={file} setFile={setFile} />
 
         <button disabled={!file} onClick={handleClickMusicDetectionButton}>
