@@ -13,15 +13,6 @@ const FlexContainer = styled.div`
 
 function HomePage() {
   const [musicInfo, setMusicInfo] = useState({})
-  const [file, setFile] = useState<File | null>(null)
-
-  async function handleClickMusicDetectionButton() {
-    if (file) {
-      const base64Encoding = await getBase64EncodingFrom(file)
-      const newMusicInfo = await fetchDetectedMusicInfo(base64Encoding)
-      setMusicInfo(newMusicInfo)
-    }
-  }
 
   useEffect(() => {
     console.log(musicInfo)
@@ -31,11 +22,7 @@ function HomePage() {
     <PageTitle title="Icezam - 음악을 검색하고, 다양한 사람들의 음악에 대한 반응을 알아보는 공간">
       <PageLayout>
         <Recorder setMusicInfo={setMusicInfo} />
-        <DragDrop file={file} setFile={setFile} />
-
-        <button disabled={!file} onClick={handleClickMusicDetectionButton}>
-          음악 검색
-        </button>
+        <DragDrop setMusicInfo={setMusicInfo} />
 
         <FlexContainer>
           <img
