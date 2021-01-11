@@ -79,6 +79,12 @@ typings/
 .next
 out
 
+# Next.js local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
 # Nuxt.js build / generate output
 .nuxt
 dist

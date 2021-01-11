@@ -8,7 +8,7 @@ function IcecreamLogo({}: Props) {
   return (
     <Link href="/">
       <a href="/">
-        <img src="/icecream-logo.png" alt="Icecream Logo" />
+        <img src="/icecream-logo.png" alt="icecream-logo" />
       </a>
     </Link>
   )
