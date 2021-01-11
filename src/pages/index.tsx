@@ -27,7 +27,7 @@ function HomePage() {
   return (
     <PageTitle title="Icezam - 음악을 검색하고, 다양한 차트와 노래 가사를 알아보는 공간">
       <PageLayout>
-        <Recorder setFile={setFile} />
+        {/* <Recorder setFile={setFile} /> */}
         <DragDrop file={file} setFile={setFile} />
 
         <button disabled={!file} onClick={handleClickMusicDetectionButton}>
