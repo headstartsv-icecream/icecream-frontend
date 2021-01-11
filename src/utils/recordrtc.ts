@@ -170,7 +170,7 @@ export function mergeLeftRightBuffers(config: any, callback: any) {
       return cb({ buffer: buffer, view: view })
     }
 
-    postMessage({ buffer: buffer, view: view })
+    postMessage({ buffer: buffer, view: view }, (undefined as unknown) as string)
   }
 
   if (config.noWorker) {
