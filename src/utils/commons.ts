@@ -33,3 +33,7 @@ export async function downloadFile(blob: Blob) {
   const newObjectURL = window.URL.createObjectURL(blob1)
   window.location.assign(newObjectURL)
 }
+
+export function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

@@ -196,7 +196,7 @@ export function mergeLeftRightBuffers(config: any, callback: any) {
   webWorker.postMessage(config)
 }
 
-export function processInWebWorker(_function: {
+function processInWebWorker(_function: {
   (config: any, cb: any): any
   toString?: any
   name?: any
