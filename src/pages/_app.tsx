@@ -4,6 +4,13 @@ import { createGlobalStyle } from 'styled-components'
 import 'sanitize.css'
 import 'antd/dist/antd.css'
 
+if (typeof document === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  global.document = { querySelector: function () {} }
+}
+
 const GlobalStyle = createGlobalStyle`
   html,
   body,
