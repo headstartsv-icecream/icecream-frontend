@@ -9,7 +9,7 @@ type Props = {}
 function MyPage({}: Props) {
   const login = false
   return (
-    <PageTitle title="Icecream Music - My Page">
+    <PageTitle title="Icezam - My Page">
       <PageLayout>{login ? 'My Page' : <LoginForm />}</PageLayout>
     </PageTitle>
   )
