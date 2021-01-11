@@ -74,5 +74,10 @@
     "defaults",
     "not IE 11",
     "maintained node versions"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn pre-push"
+    }
+  }
 }
