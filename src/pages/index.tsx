@@ -3,7 +3,7 @@ import DragDrop from 'src/components/atoms/DragDrop'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import Recorder from 'src/components/Recorder'
-import { getBase64EncodingFrom } from 'src/utils/commons'
+import { downloadFile, fetchDetectedMusicInfo, getBase64EncodingFrom } from 'src/utils/commons'
 import styled from 'styled-components'
 
 const FlexContainer = styled.div`
@@ -11,40 +11,28 @@ const FlexContainer = styled.div`
   flex-flow: row wrap;
 `
 
-async function getDetectedMusicInfo(body: string) {
-  try {
-    const response = await fetch('https://shazam.p.rapidapi.com/songs/detect', {
-      method: 'POST',
-      headers: {
-        'content-type': 'text/plain',
-        'x-rapidapi-key': process.env.NEXT_PUBLIC_SHAZAM_API_KEY ?? '',
-        'x-rapidapi-host': 'shazam.p.rapidapi.com',
-      },
-      body,
-    })
-    return await response.json()
-  } catch (error) {
-    console.error(error)
-  }
-}
-
 function HomePage() {
   const [file, setFile] = useState<File | null>(null)
 
   async function handleClickMusicDetectionButton() {
     if (file) {
       const base64Encoding = await getBase64EncodingFrom(file)
-      const musicInfo = await getDetectedMusicInfo(base64Encoding.slice(37))
+      console.log(base64Encoding)
+      const musicInfo = await fetchDetectedMusicInfo(base64Encoding)
       console.log(musicInfo)
     }
   }
 
+  console.log(file)
+
   return (
-    <PageTitle title="Icecream Music">
+    <PageTitle title="Icezam - 음악을 검색하고, 다양한 차트와 노래 가사를 알아보는 공간">
       <PageLayout>
-        <Recorder />
+        <Recorder file={file} setFile={setFile} />
         <DragDrop file={file} setFile={setFile} />
+
         <button onClick={handleClickMusicDetectionButton}>확인</button>
+        <button onClick={() => file && downloadFile(file)}>올린 거 다운로드</button>
         <FlexContainer>
           <img
             src="https://www.shazam.com/resources/291229600ef1fb473214ef503895c8185827152f/home/rec-devices.jpg"
