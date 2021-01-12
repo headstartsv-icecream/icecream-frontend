@@ -1,18 +1,30 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { memo } from 'react'
+import styled from 'styled-components'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {}
+const MaxWidth = styled.div`
+  width: 100%;
+  min-width: 3rem;
+  max-width: 5rem;
 
-// eslint-disable-next-line no-empty-pattern
-function IcezamLogo({}: Props) {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 1, 1) 0s;
+
+  &:hover {
+    transform: scale(1.04);
+  }
+`
+
+function IcezamLogo() {
   return (
     <Link href="/">
       <a href="/">
-        <Image src="/icezam-logo.png" alt="icezam-logo" width={50} height={50} />
+        <MaxWidth>
+          <Image src="/icezam-logo.png" alt="icezam-logo" width={500} height={500} />
+        </MaxWidth>
       </a>
     </Link>
   )
 }
 
-export default IcezamLogo
+export default memo(IcezamLogo)
