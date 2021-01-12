@@ -1,5 +1,8 @@
-import { AppProps } from 'next/app'
+import { AppProps } from 'next/dist/next-server/lib/router/router'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { pageview } from 'src/utils/google-analytics'
 import { createGlobalStyle } from 'styled-components'
 import 'sanitize.css'
 import 'antd/dist/antd.css'
@@ -20,6 +23,19 @@ const description = '지금 들리는 음악을 Icezam에서 검색하고 다양
 const keywords = '아이스잠, Icezam, 노래, 음악, 음악검색, MusicDetection'
 
 function IcecreamApp({ Component, pageProps }: AppProps) {
+  const router = useRouter()
+
+  // Google Analytics로 정보 보내기
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      const handleRouteChange = (url: string) => pageview(url)
+      router.events.on('routeChangeComplete', handleRouteChange)
+      return () => {
+        router.events.off('routeChangeComplete', handleRouteChange)
+      }
+    }
+  }, [router.events])
+
   return (
     <>
       <Head>

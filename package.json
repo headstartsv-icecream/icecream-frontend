@@ -43,6 +43,7 @@
     "@graphql-codegen/typescript-react-apollo": "2.2.1",
     "@testing-library/react": "^11.2.2",
     "@types/dom-mediacapture-record": "^1.0.7",
+    "@types/gtag.js": "^0.0.4",
     "@types/jest": "^26.0.19",
     "@types/node": "^14.14.16",
     "@types/react": "^17.0.0",
