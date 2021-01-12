@@ -3,7 +3,6 @@ import DragDrop from 'src/components/atoms/DragDrop'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import Recorder from 'src/components/Recorder'
-import { fetchDetectedMusicInfo, getBase64EncodingFrom } from 'src/utils/commons'
 import styled from 'styled-components'
 
 const FlexContainer = styled.div`
@@ -19,7 +18,7 @@ function HomePage() {
   }, [musicInfo])
 
   return (
-    <PageTitle title="Icezam - 음악을 검색하고, 다양한 사람들의 음악에 대한 반응을 알아보는 공간">
+    <PageTitle title="Icezam - 음악을 검색하고, 음악에 대한 다양한 사람들의 반응을 알아보는 공간">
       <PageLayout>
         <Recorder setMusicInfo={setMusicInfo} />
         <DragDrop setMusicInfo={setMusicInfo} />
