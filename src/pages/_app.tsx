@@ -4,13 +4,13 @@ import { createGlobalStyle } from 'styled-components'
 import 'sanitize.css'
 import 'antd/dist/antd.css'
 
-// 이거 추가하니까 TypeError: document.querySelector... 오류 없어졌는데 왜 없어진거지?
-if (typeof document === 'undefined') {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  global.document = { querySelector: function () {} }
-}
+// // 이거 추가하니까 TypeError: document.querySelector... 오류 없어졌는데 왜 없어진거지?
+// if (typeof document === 'undefined') {
+//   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//   // @ts-ignore
+//   // eslint-disable-next-line @typescript-eslint/no-empty-function
+//   global.document = { querySelector: function () {} }
+// }
 
 const GlobalStyle = createGlobalStyle`
   html,
