@@ -1,27 +1,62 @@
 /* eslint-disable no-constant-condition */
+import useScrollPosition from '@react-hook/window-scroll'
 import Link from 'next/link'
+import styled from 'styled-components'
 import IcezamLogo from './atoms/IcezamLogo'
 import LoginButton from './LoginButton'
 import LogoutButton from './LogoutButton'
 import SearchInput from './SearchInput'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {}
+const FlexContainerBetween = styled.div<{ isTop: boolean }>`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
 
-// eslint-disable-next-line no-empty-pattern
-function Navigation({}: Props) {
+  transition: color 0.2s cubic-bezier(0.4, 0, 1, 1) 0s,
+    background-color 0.2s cubic-bezier(0.4, 0, 1, 1) 0s;
+
+  ${(p) =>
+    p.isTop
+      ? `a {
+          color: #fff;
+         }`
+      : `background-color: #fff`}
+`
+
+const FlexContainer = styled.div`
+  margin: 0 1rem;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 1rem;
+
+  > * {
+    width: max-content;
+  }
+`
+
+function Navigation() {
+  const scrollY = useScrollPosition()
+
   return (
     <nav>
-      <IcezamLogo />
-      <Link href="myicezam">
-        <a href="myicezam">내 라이브러리</a>
-      </Link>
-      <Link href="charts">
-        <a href="charts">차트</a>
-      </Link>
+      <FlexContainerBetween isTop={scrollY === 0}>
+        <FlexContainer>
+          <IcezamLogo />
+          <Link href="myicezam">
+            <a href="myicezam">내 라이브러리</a>
+          </Link>
+          <Link href="charts">
+            <a href="charts">차트</a>
+          </Link>
+        </FlexContainer>
 
-      <SearchInput />
-      {true ? <LoginButton /> : <LogoutButton />}
+        <FlexContainer>
+          <SearchInput />
+          {true ? <LoginButton /> : <LogoutButton />}
+        </FlexContainer>
+      </FlexContainerBetween>
     </nav>
   )
 }
