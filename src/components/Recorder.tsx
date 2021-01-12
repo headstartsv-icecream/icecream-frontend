@@ -10,12 +10,23 @@ import { mergeLeftRightBuffers } from 'src/utils/recordrtc'
 import styled from 'styled-components'
 
 const FlexContainerColumn = styled.div`
+  min-height: 300px;
+  height: 100vh;
+  padding-top: 5rem;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
 
   background: linear-gradient(to bottom, #0bf, #066aff);
+
+  h1,
+  h3 {
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    word-break: keep-all;
+  }
 `
 
 // Temporary Type
@@ -91,8 +102,8 @@ function Recorder({ setMusicInfo }: Props) {
 
   return (
     <FlexContainerColumn>
-      <h3>Shazam은 주변에서 들리는 곡을 인식합니다.</h3>
-      <h4>클릭하여 Shazam하기</h4>
+      <h1>Icezam은 주변에서 들리는 곡을 인식합니다.</h1>
+      <h3>클릭하여 Icezam하기</h3>
 
       <button onClick={recordAudioCyclically}>녹음</button>
     </FlexContainerColumn>
