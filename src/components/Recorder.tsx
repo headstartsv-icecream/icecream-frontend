@@ -1,11 +1,6 @@
 import { useEffect, useRef } from 'react'
 import RecordRTC, { StereoAudioRecorder } from 'recordrtc'
-import {
-  downloadFile,
-  fetchDetectedMusicInfo,
-  getBase64EncodingFrom,
-  wait,
-} from 'src/utils/commons'
+import { fetchDetectedMusicInfo, getBase64EncodingFrom, wait } from 'src/utils/commons'
 import { mergeLeftRightBuffers } from 'src/utils/recordrtc'
 import styled from 'styled-components'
 
