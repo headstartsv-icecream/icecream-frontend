@@ -1,11 +1,13 @@
 /* eslint-disable no-constant-condition */
+import { MenuOutlined } from '@ant-design/icons'
 import useScrollPosition from '@react-hook/window-scroll'
 import Link from 'next/link'
+import { DESKTOP_MIN_WIDTH, TABLET_MIN_WIDTH } from 'src/models/constants'
 import styled from 'styled-components'
 import IcezamLogo from './atoms/IcezamLogo'
 import LoginButton from './LoginButton'
 import LogoutButton from './LogoutButton'
-import SearchInput from './SearchInput'
+import SearchForm from './atoms/SearchForm'
 
 const FlexContainerBetween = styled.div<{ isTop: boolean }>`
   display: flex;
@@ -18,10 +20,22 @@ const FlexContainerBetween = styled.div<{ isTop: boolean }>`
 
   ${(p) =>
     p.isTop
-      ? `a {
-          color: #fff;
-         }`
-      : `background-color: #fff`}
+      ? `
+      a, span {
+        color: #fff;
+      }
+      `
+      : `
+      background-color: #fff;
+      input {
+        background-color: #f4f4f4;
+        color: #08f;
+        transition: opacity .3s ease-in-out, box-shadow .3s ease-in-out;
+        :focus {
+          box-shadow: 0 0 2px 2px rgba(0,136,255,.5);
+        }
+      }
+  `}
 `
 
 const FlexContainer = styled.div`
@@ -36,7 +50,28 @@ const FlexContainer = styled.div`
   }
 `
 
-const LeftNavigation = styled(FlexContainer)``
+const HamburgerIcon = styled(MenuOutlined)`
+  font-size: 1.5rem;
+  @media (min-width: ${DESKTOP_MIN_WIDTH}) {
+    display: none;
+  }
+`
+
+const LeftNavigation = styled(FlexContainer)`
+  @media (max-width: ${DESKTOP_MIN_WIDTH}) {
+    > :not(:first-child) {
+      display: none;
+    }
+  }
+`
+
+const RightNavigation = styled(FlexContainer)`
+  @media (max-width: ${TABLET_MIN_WIDTH}) {
+    > :not(:last-child) {
+      display: none;
+    }
+  }
+`
 
 function Navigation() {
   const scrollY = useScrollPosition()
@@ -54,10 +89,12 @@ function Navigation() {
           </Link>
         </LeftNavigation>
 
-        <FlexContainer>
-          <SearchInput />
+        <RightNavigation>
+          <SearchForm />
           {true ? <LoginButton /> : <LogoutButton />}
-        </FlexContainer>
+
+          <HamburgerIcon />
+        </RightNavigation>
       </FlexContainerBetween>
     </nav>
   )
