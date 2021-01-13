@@ -8,7 +8,7 @@ import styled, { keyframes } from 'styled-components'
 const FlexContainerColumn = styled.div`
   min-height: 300px;
   height: 100vh;
-  padding-top: 5rem;
+  padding-top: 4rem;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;

@@ -35,6 +35,9 @@ const FlexContainerBetween = styled.div<{ isTop: boolean }>`
           box-shadow: 0 0 2px 2px rgba(0,136,255,.5);
         }
       }
+      span {
+        color: #08f;
+      }
   `}
 `
 
@@ -76,6 +79,10 @@ const RightNavigation = styled(FlexContainer)`
 function Navigation() {
   const scrollY = useScrollPosition()
 
+  function openDrawer() {
+    console.log('open drawer')
+  }
+
   return (
     <nav>
       <FlexContainerBetween isTop={scrollY === 0}>
@@ -93,7 +100,7 @@ function Navigation() {
           <SearchForm />
           {true ? <LoginButton /> : <LogoutButton />}
 
-          <HamburgerIcon />
+          <HamburgerIcon onClick={openDrawer} />
         </RightNavigation>
       </FlexContainerBetween>
     </nav>
