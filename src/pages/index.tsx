@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 const FlexContainer = styled.div`
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
 `
 
 function HomePage() {
@@ -24,10 +24,6 @@ function HomePage() {
         <DragDrop setMusicInfo={setMusicInfo} />
 
         <FlexContainer>
-          <img
-            src="https://www.shazam.com/resources/291229600ef1fb473214ef503895c8185827152f/home/rec-devices.jpg"
-            alt="app-preview"
-          />
           <div>
             <h3>앱 다운로드</h3>
             <h2>어디서든 주변에서 나오는 곡이 무슨 곡인지 찾아 드립니다.</h2>
