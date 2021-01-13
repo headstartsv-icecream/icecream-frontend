@@ -3,7 +3,6 @@ import DragDrop from 'src/components/atoms/DragDrop'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import Recorder from 'src/components/Recorder'
-import ImageLoader from 'src/components/atoms/ImageLoader'
 import { fetchDetectedMusicInfo, getBase64EncodingFrom } from 'src/utils/commons'
 import styled from 'styled-components'
 
@@ -41,12 +40,6 @@ function HomePage() {
               휴대폰 카메라로 코드를 스캔하여 Shazam 앱을 무료로 다운로드해 보세요 iOS, Android 및
               기타 기기에서 사용할 수 있습니다
             </p>
-          </div>
-          <div>
-            <ImageLoader sourcePath={logo} width={50} height={50} />
-          </div>
-          <div>
-            <ImageLoader sourcePath={gif} width={500} height={500} />
           </div>
         </FlexContainer>
       </PageLayout>
