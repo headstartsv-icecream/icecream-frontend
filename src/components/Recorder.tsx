@@ -1,8 +1,9 @@
+import Image from 'next/image'
 import { useEffect, useRef } from 'react'
 import RecordRTC, { StereoAudioRecorder } from 'recordrtc'
 import { fetchDetectedMusicInfo, getBase64EncodingFrom, wait } from 'src/utils/commons'
 import { mergeLeftRightBuffers } from 'src/utils/recordrtc'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 const FlexContainerColumn = styled.div`
   min-height: 300px;
@@ -16,11 +17,44 @@ const FlexContainerColumn = styled.div`
   background: linear-gradient(to bottom, #0bf, #066aff);
 
   h1,
-  h3 {
+  h2 {
     color: #fff;
     font-weight: bold;
     text-align: center;
     word-break: keep-all;
+  }
+`
+
+const H1 = styled.h1`
+  font-size: 3rem;
+  margin: 1rem;
+`
+
+const H2 = styled.h2`
+  margin: 1rem;
+`
+
+const MaxWidth = styled.div`
+  max-width: 350px;
+`
+
+const breathingButton = keyframes`
+  0%, 100% {
+    transform: scale(1,1);
+  }
+  50% {
+    transform: scale(1.05,1.05);
+  }
+`
+
+const AnimatedImage = styled(Image)`
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 2px;
+  animation: ${breathingButton} 3s infinite ease-in-out;
+
+  :hover {
+    cursor: pointer;
   }
 `
 
@@ -97,10 +131,17 @@ function Recorder({ setMusicInfo }: Props) {
 
   return (
     <FlexContainerColumn>
-      <h1>Icezam은 주변에서 들리는 곡을 인식합니다.</h1>
-      <h3>클릭하여 Icezam하기</h3>
-
-      <button onClick={recordAudioCyclically}>녹음</button>
+      <H1>Icezam은 주변에서 들리는 곡을 인식합니다.</H1>
+      <H2>클릭하여 Icezam하기</H2>
+      <MaxWidth>
+        <AnimatedImage
+          src="/icezam-logo.png"
+          alt="icezam-logo"
+          width={500}
+          height={500}
+          onClick={recordAudioCyclically}
+        />
+      </MaxWidth>
     </FlexContainerColumn>
   )
 }
