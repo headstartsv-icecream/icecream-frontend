@@ -1,14 +1,16 @@
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {}
+import { FormEvent } from 'react'
 
-// eslint-disable-next-line no-empty-pattern
-function LoginForm({}: Props) {
+function LoginForm() {
+  function login(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+  }
+
   return (
-    <form>
+    <form onSubmit={login}>
       <label htmlFor="email">이메일</label>
       <input name="email" />
-      <label htmlFor="email">비밀번호</label>
-      <input />
+      <label htmlFor="password">비밀번호</label>
+      <input name="password" type="password" />
     </form>
   )
 }
