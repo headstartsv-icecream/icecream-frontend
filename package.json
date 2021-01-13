@@ -26,6 +26,7 @@
     "antd": "^4.9.4",
     "graphql": "^15.4.0",
     "next": "^10.0.4",
+    "next-images": "^1.6.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "recordrtc": "git+https://github.com/headstartsv-icecream/RecordRTC.git",
