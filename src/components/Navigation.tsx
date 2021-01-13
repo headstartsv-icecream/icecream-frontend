@@ -36,13 +36,15 @@ const FlexContainer = styled.div`
   }
 `
 
+const LeftNavigation = styled(FlexContainer)``
+
 function Navigation() {
   const scrollY = useScrollPosition()
 
   return (
     <nav>
       <FlexContainerBetween isTop={scrollY === 0}>
-        <FlexContainer>
+        <LeftNavigation>
           <IcezamLogo />
           <Link href="myicezam">
             <a href="myicezam">내 라이브러리</a>
@@ -50,7 +52,7 @@ function Navigation() {
           <Link href="charts">
             <a href="charts">차트</a>
           </Link>
-        </FlexContainer>
+        </LeftNavigation>
 
         <FlexContainer>
           <SearchInput />
