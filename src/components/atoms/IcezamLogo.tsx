@@ -4,9 +4,9 @@ import { memo } from 'react'
 import styled from 'styled-components'
 
 const MaxWidth = styled.div`
-  width: 100%;
-  min-width: 3rem;
-  max-width: 5rem;
+  min-width: 2rem;
+  max-width: 4rem;
+  max-height: 4rem;
 
   transition: transform 0.2s cubic-bezier(0.4, 0, 1, 1) 0s;
 
@@ -17,13 +17,13 @@ const MaxWidth = styled.div`
 
 function IcezamLogo() {
   return (
-    <Link href="/">
-      <a href="/">
-        <MaxWidth>
+    <MaxWidth>
+      <Link href="/">
+        <a href="/">
           <Image src="/icezam-logo.png" alt="icezam-logo" width={500} height={500} />
-        </MaxWidth>
-      </a>
-    </Link>
+        </a>
+      </Link>
+    </MaxWidth>
   )
 }
 
