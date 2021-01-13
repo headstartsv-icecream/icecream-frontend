@@ -49,7 +49,7 @@ function DragDrop({ setMusicInfo }: Props) {
       onDrop={handleDrop}
     >
       <p className={styles.p}>또는 파일을 여기로 드래그하여 Icezam하기</p>
-      <h5>44.1kHz, 1 Channel, Signed 16-bit PCM, Little endian</h5>
+      <h5>44.1kHz, 1 Channel, Signed 16-bit PCM, Little endian, 500kB 이하</h5>
     </div>
   )
 }
