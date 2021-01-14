@@ -1,7 +1,12 @@
+import { Dispatch, SetStateAction } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const gif = require('../../public/equalizer.gif')
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,12 +26,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   isOpen: boolean
-  close: (isOpen: boolean) => void
+  setModalOpen: Dispatch<SetStateAction<boolean>>
+  setRecording: Dispatch<SetStateAction<boolean>>
 }
 
-export default function OverlayModal({ isOpen, close }: Props) {
+export default function OverlayModal({ isOpen, setModalOpen, setRecording }: Props) {
   const classes = useStyles()
-  // getModalStyle is not a pure function, we roll the style only on the first render
 
   return (
     <div>
@@ -35,7 +40,10 @@ export default function OverlayModal({ isOpen, close }: Props) {
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={isOpen}
-        onClose={close}
+        onClose={() => {
+          setModalOpen(false)
+          setRecording(false)
+        }}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -45,8 +53,18 @@ export default function OverlayModal({ isOpen, close }: Props) {
         <Fade in={isOpen}>
           <div className={classes.paper}>
             <h2 id="transition-modal-title">Hearing your music...</h2>
-            <img src="../../public/equalizer.gif" alt="Searching your music..." />
+            <img src={gif} alt="Searching your music..." />
             <p id="transition-modal-description">react-transition-group animates me.</p>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                setModalOpen(false)
+                setRecording(false)
+              }}
+            >
+              취소하기
+            </Button>
           </div>
         </Fade>
       </Modal>

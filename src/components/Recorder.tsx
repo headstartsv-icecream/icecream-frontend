@@ -90,14 +90,8 @@ function Recorder({ setMusicInfo }: Props) {
   const audioStream = useRef<MediaStream | null>(null)
   const audioRecorder = useRef<RecordRTC | null>(null)
   const [ModalOpen, setModalOpen] = useState<boolean>(false)
+  const [Recording, setRecording] = useState<boolean>(false)
 
-  function openModal() {
-    setModalOpen(true)
-  }
-
-  function closeModal() {
-    setModalOpen(false)
-  }
   async function recordAudioCyclically() {
     if (!audioStream.current || !audioRecorder.current) {
       audioStream.current = await window.navigator.mediaDevices.getUserMedia({ audio: true })
@@ -112,6 +106,8 @@ function Recorder({ setMusicInfo }: Props) {
     }
 
     for (let i = 0; i < 4; i++) {
+      // console.log(Recording)
+      // if (Recording) {
       console.log('Recording...')
       audioRecorder.current.startRecording()
       await wait(3000 + i * 500)
@@ -125,12 +121,20 @@ function Recorder({ setMusicInfo }: Props) {
 
       if (newMusicInfo.matches.length) {
         setMusicInfo(newMusicInfo)
+        setRecording(false)
         break
       } else {
         audioRecorder.current.reset()
+        console.log('new track')
+        setRecording(true)
       }
+      // }
     }
   }
+
+  // async function printRecording() {
+  //   await setRecording(true)
+  // }
 
   useEffect(() => {
     return () => {
@@ -149,27 +153,14 @@ function Recorder({ setMusicInfo }: Props) {
           width={500}
           height={500}
           onClick={() => {
+            setRecording(true)
             recordAudioCyclically()
-            openModal()
+            setModalOpen(true)
           }}
         />
-        <OverlayModal isOpen={ModalOpen} close={closeModal} />
+        <OverlayModal isOpen={ModalOpen} setModalOpen={setModalOpen} setRecording={setRecording} />
       </MaxWidth>
     </FlexContainerColumn>
-    // <div style={{ backgroundColor: '#123456' }}>
-    //   <h3>Shazam은 주변에서 들리는 곡을 인식합니다.</h3>
-    //   <h4>클릭하여 Shazam하기</h4>
-
-    //   <button
-    // onClick={() => {
-    //   recordAudioCyclically()
-    //   openModal()
-    // }}
-    //   >
-    //     녹음
-    //   </button>
-    //   <OverlayModal isOpen={ModalOpen} close={closeModal} />
-    // </div>
   )
 }
 
