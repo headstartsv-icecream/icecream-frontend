@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // RecordRTC.StereoAudioRecorder에 있는 함수 복사 및 임시로 타입 지정
 
 type TemporaryWorker = Worker & { workerURL?: string }

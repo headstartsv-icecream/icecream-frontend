@@ -3,7 +3,7 @@ type Props = {}
 
 // eslint-disable-next-line no-empty-pattern
 function Footer({}: Props) {
-  return <footer>footer</footer>
+  return <footer></footer>
 }
 
 export default Footer
