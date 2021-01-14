@@ -16,7 +16,6 @@ const logo = require('../../public/icezam-logo.png')
 
 function HomePage() {
   const [musicInfo, setMusicInfo] = useState({})
-
   useEffect(() => {
     console.log(musicInfo)
   }, [musicInfo])

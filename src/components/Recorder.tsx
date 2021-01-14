@@ -1,9 +1,10 @@
 import Image from 'next/image'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import RecordRTC, { StereoAudioRecorder } from 'recordrtc'
 import { fetchDetectedMusicInfo, getBase64EncodingFrom, wait } from 'src/utils/commons'
 import { mergeLeftRightBuffers } from 'src/utils/recordrtc'
 import styled, { keyframes } from 'styled-components'
+import OverlayModal from './OverlayModal'
 
 const FlexContainerColumn = styled.div`
   min-height: 300px;
@@ -88,6 +89,8 @@ type Props = {
 function Recorder({ setMusicInfo }: Props) {
   const audioStream = useRef<MediaStream | null>(null)
   const audioRecorder = useRef<RecordRTC | null>(null)
+  const [ModalOpen, setModalOpen] = useState<boolean>(false)
+  const [Recording, setRecording] = useState<boolean>(false)
 
   async function recordAudioCyclically() {
     if (!audioStream.current || !audioRecorder.current) {
@@ -103,6 +106,8 @@ function Recorder({ setMusicInfo }: Props) {
     }
 
     for (let i = 0; i < 4; i++) {
+      // console.log(Recording)
+      // if (Recording) {
       console.log('Recording...')
       audioRecorder.current.startRecording()
       await wait(3000 + i * 500)
@@ -116,12 +121,20 @@ function Recorder({ setMusicInfo }: Props) {
 
       if (newMusicInfo.matches.length) {
         setMusicInfo(newMusicInfo)
+        setRecording(false)
         break
       } else {
         audioRecorder.current.reset()
+        console.log('new track')
+        setRecording(true)
       }
+      // }
     }
   }
+
+  // async function printRecording() {
+  //   await setRecording(true)
+  // }
 
   useEffect(() => {
     return () => {
@@ -139,8 +152,13 @@ function Recorder({ setMusicInfo }: Props) {
           alt="icezam-logo"
           width={500}
           height={500}
-          onClick={recordAudioCyclically}
+          onClick={() => {
+            setRecording(true)
+            recordAudioCyclically()
+            setModalOpen(true)
+          }}
         />
+        <OverlayModal isOpen={ModalOpen} setModalOpen={setModalOpen} setRecording={setRecording} />
       </MaxWidth>
     </FlexContainerColumn>
   )
