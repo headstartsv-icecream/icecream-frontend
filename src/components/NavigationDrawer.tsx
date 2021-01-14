@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
 import IcezamLogo from './atoms/IcezamLogo'
 
-const AbsolutePosition = styled.div<{ isVisible: boolean }>`
+const AbsolutePosition = styled.div<{ doesDrawerOpen: boolean }>`
   width: 100%;
   height: 100%;
   position: fixed;
@@ -13,12 +13,12 @@ const AbsolutePosition = styled.div<{ isVisible: boolean }>`
   background-color: #888;
   overflow-y: auto;
 
-  ${({ isVisible }) =>
-    isVisible ? 'transform: translate(0, 0);' : 'transform: translate(101%, 0);'}
+  ${(p) => (p.doesDrawerOpen ? 'transform: translate(0, 0);' : 'transform: translate(101%, 0);')}
   transition: transform 0.3s cubic-bezier(0.4, 0.2, 0, 1);
 `
 
 const FlexContainerBetween = styled.div`
+  margin: 0 1rem;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -38,7 +38,7 @@ type Props = {
 function NavigationDrawer({ closeDrawer, doesDrawerOpen }: Props) {
   return (
     <ClientPortal>
-      <AbsolutePosition isVisible={doesDrawerOpen}>
+      <AbsolutePosition doesDrawerOpen={doesDrawerOpen}>
         <FlexContainerBetween>
           <div onClick={closeDrawer} onKeyDown={closeDrawer} role="button" tabIndex={0}>
             <IcezamLogo />
