@@ -3,7 +3,7 @@ type Props = {}
 
 // eslint-disable-next-line no-empty-pattern
 function LoginButton({}: Props) {
-  return <></>
+  return <button>로그인</button>
 }
 
 export default LoginButton
