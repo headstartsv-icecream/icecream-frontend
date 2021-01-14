@@ -48,8 +48,8 @@ function DragDrop({ setMusicInfo }: Props) {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <p className={styles.p}>또는 여기에 파일 드래그하여 Icezam하기</p>
-      <p>44.1KHz, 1 Channel, Signed 16-bit PCM, Little endian</p>
+      <p className={styles.p}>또는 파일을 여기로 드래그하여 Icezam하기</p>
+      <h5>44.1kHz, 1 Channel, Signed 16-bit PCM, Little endian, 500kB 이하</h5>
     </div>
   )
 }
