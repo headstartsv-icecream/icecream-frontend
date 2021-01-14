@@ -2,14 +2,13 @@
 import { MenuOutlined } from '@ant-design/icons'
 import useScrollPosition from '@react-hook/window-scroll'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DESKTOP_MIN_WIDTH, TABLET_MIN_WIDTH } from 'src/models/constants'
 import styled from 'styled-components'
 import IcezamLogo from './atoms/IcezamLogo'
 import LoginButton from './LoginButton'
 import LogoutButton from './LogoutButton'
 import SearchForm from './atoms/SearchForm'
-import ClientPortal from './atoms/ClientPortal'
 import NavigationDrawer from './NavigationDrawer'
 
 const FlexContainerBetween = styled.div<{ isTop: boolean }>`
@@ -86,6 +85,17 @@ const RightNavigation = styled(FlexContainer)`
 function Navigation() {
   const [doesDrawerOpen, setDoesDrawerOpen] = useState(false)
   const scrollY = useScrollPosition()
+
+  useEffect(() => {
+    document.addEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
+    return () => document.removeEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
+  }, [])
+
+  function closeDrawerWhenEscapeKeyPressed(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      setDoesDrawerOpen(false)
+    }
+  }
 
   function openDrawer() {
     setDoesDrawerOpen(true)
