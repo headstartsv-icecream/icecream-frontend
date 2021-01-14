@@ -1,5 +1,6 @@
 import { CloseOutlined } from '@ant-design/icons'
 import Link from 'next/link'
+import { useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
 import IcezamLogo from './atoms/IcezamLogo'
@@ -55,6 +56,22 @@ type Props = {
 }
 
 function NavigationDrawer({ closeDrawer, doesDrawerOpen }: Props) {
+  const previousScrollY = useRef<number>()
+
+  useLayoutEffect(() => {
+    if (doesDrawerOpen) {
+      previousScrollY.current = window.scrollY
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${previousScrollY.current}px`
+    } else {
+      document.body.style.position = ''
+      document.body.style.top = ''
+      if (previousScrollY.current) {
+        window.scrollTo(0, previousScrollY.current)
+      }
+    }
+  }, [doesDrawerOpen, previousScrollY])
+
   return (
     <ClientPortal>
       <AbsolutePosition doesDrawerOpen={doesDrawerOpen}>
