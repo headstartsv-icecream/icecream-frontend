@@ -2,8 +2,8 @@
 type Props = {}
 
 // eslint-disable-next-line no-empty-pattern
-function LoginButton({}: Props) {
-  return <></>
+function SearchInput({}: Props) {
+  return <input></input>
 }
 
-export default LoginButton
+export default SearchInput

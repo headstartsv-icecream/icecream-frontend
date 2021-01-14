@@ -1,14 +1,13 @@
 import { DragEvent, useState } from 'react'
-import { fetchDetectedMusicInfo, getBase64EncodingFrom } from 'src/utils/commons'
 import styles from './DragDrop.module.css'
 
 type Props = {
-  setMusicInfo: (info: Record<string, unknown>) => void
+  file: File | null
+  setFile: (file: File) => void
 }
 
-function DragDrop({ setMusicInfo }: Props) {
+function DragDrop({ file, setFile }: Props) {
   const [inDropZone, setInDropZone] = useState(false)
-  const [fileName, setFileName] = useState('')
 
   function handleDragEnter(e: DragEvent<HTMLDivElement>) {
     setInDropZone(true)
@@ -23,18 +22,13 @@ function DragDrop({ setMusicInfo }: Props) {
     setInDropZone(false)
   }
 
-  async function handleDrop(e: DragEvent<HTMLDivElement>) {
+  function handleDrop(e: DragEvent<HTMLDivElement>) {
     e.preventDefault() // Prevent file from being opened
 
     const newFile = e.dataTransfer.files[0]
 
-    if (newFile && newFile.name !== fileName) {
-      setFileName(newFile.name)
-      const base64Encoding = await getBase64EncodingFrom(newFile)
-
-      console.log('Searching audio blob...')
-      const newMusicInfo = await fetchDetectedMusicInfo(base64Encoding)
-      setMusicInfo(newMusicInfo)
+    if (newFile && newFile.name !== file?.name) {
+      setFile(newFile)
     }
 
     setInDropZone(false)
@@ -48,8 +42,7 @@ function DragDrop({ setMusicInfo }: Props) {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <p className={styles.p}>또는 파일을 여기로 드래그하여 Icezam하기</p>
-      <h5>44.1kHz, 1 Channel, Signed 16-bit PCM, Little endian, 500kB 이하</h5>
+      <p className={styles.p}>Drag a file here to upload (RAW) </p>
     </div>
   )
 }
