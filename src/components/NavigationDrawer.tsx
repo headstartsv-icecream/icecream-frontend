@@ -52,14 +52,14 @@ const FlexContainerColumn = styled.ul`
 
 type Props = {
   closeDrawer: () => void
-  doesDrawerOpen: boolean
+  isDrawerOpen: boolean
 }
 
-function NavigationDrawer({ closeDrawer, doesDrawerOpen }: Props) {
+function NavigationDrawer({ closeDrawer, isDrawerOpen }: Props) {
   const previousScrollY = useRef<number>()
 
   useLayoutEffect(() => {
-    if (doesDrawerOpen) {
+    if (isDrawerOpen) {
       previousScrollY.current = window.scrollY
       document.body.style.position = 'fixed'
       document.body.style.top = `-${previousScrollY.current}px`
@@ -70,11 +70,11 @@ function NavigationDrawer({ closeDrawer, doesDrawerOpen }: Props) {
         window.scrollTo(0, previousScrollY.current)
       }
     }
-  }, [doesDrawerOpen, previousScrollY])
+  }, [isDrawerOpen, previousScrollY])
 
   return (
     <ClientPortal>
-      <AbsolutePosition doesDrawerOpen={doesDrawerOpen}>
+      <AbsolutePosition doesDrawerOpen={isDrawerOpen}>
         <FlexContainerBetween>
           <div onClick={closeDrawer} onKeyDown={closeDrawer} role="button" tabIndex={0}>
             <IcezamLogo />
