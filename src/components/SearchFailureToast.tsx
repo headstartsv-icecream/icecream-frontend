@@ -91,7 +91,7 @@ type Props = {
   onClose: () => void
 }
 
-function SearchFailureModal({ isOpen, onClose }: Props) {
+function SearchFailureToast({ isOpen, onClose }: Props) {
   return (
     <ClientPortal isOpen={isOpen ?? false} onClose={onClose}>
       <FixedPosition isModalOpen={isOpen}>
@@ -108,4 +108,4 @@ function SearchFailureModal({ isOpen, onClose }: Props) {
   )
 }
 
-export default SearchFailureModal
+export default SearchFailureToast
