@@ -24,6 +24,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+function getSearchingStatusFrom(recordingCount: number): [string, string] {
+  switch (recordingCount) {
+    case 0:
+      return ['확인 중', '이 페이지를 새로고침하거나 닫지 마세요.']
+    case 1:
+      return ['일치하는 음악 검색 중', '기다려주세요.']
+    case 2:
+      return ['검색 확장 중', '기다려주세요.']
+    case 3:
+      return ['현재까지 검색 결과가 없습니다.', '마지막 시도']
+    default:
+      return ['너무 많은 검색 시도', '그만 시도 하세요']
+  }
+}
+
 // Temporary Type
 type InternalRecorder = {
   recordingLength: number
@@ -61,6 +76,10 @@ function RecorderModal({ isOpen, setIsOpen, setMusicInfo }: Props) {
   const isMounted = useMounted()
 
   const classes = useStyles()
+
+  function closeModal() {
+    setIsOpen(false)
+  }
 
   async function recordAudio(minimumRecordingDuration: number) {
     if (!audioStream.current || !audioRecorder.current) {
@@ -105,9 +124,13 @@ function RecorderModal({ isOpen, setIsOpen, setMusicInfo }: Props) {
         if (isMounted.current) {
           if (newMusicInfo.matches.length) {
             setMusicInfo(newMusicInfo)
-          } else {
+          } else if (recordingCount !== 3) {
             console.log("Didn't detect the audio")
             setRecordingCount((prev) => prev + 1)
+          } else {
+            console.log("Didn't detect the audio")
+            setMusicInfo({})
+            closeModal()
           }
         }
       }
@@ -117,39 +140,32 @@ function RecorderModal({ isOpen, setIsOpen, setMusicInfo }: Props) {
   }, [recordingCount, setMusicInfo])
 
   return (
-    <div>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={isOpen}
-        onClose={() => {
-          setIsOpen(false)
-        }}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={isOpen}>
-          <div className={classes.paper}>
-            <h2 id="transition-modal-title">Hearing your music...</h2>
-            <img src={gif} alt="Searching your music..." />
-            <p id="transition-modal-description">react-transition-group animates me.</p>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                setIsOpen(false)
-              }}
-            >
-              취소하기
-            </Button>
-          </div>
-        </Fade>
-      </Modal>
-    </div>
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      className={classes.modal}
+      open={isOpen}
+      onClose={closeModal}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={isOpen}>
+        <div className={classes.paper}>
+          <h1 id="transition-modal-title">Hearing your music...</h1>
+          <img src={gif} alt="Searching your music..." />
+          <p id="transition-modal-description">react-transition-group animates me.</p>
+          <h2>{getSearchingStatusFrom(recordingCount)[0]}</h2>
+          <h3>{getSearchingStatusFrom(recordingCount)[1]}</h3>
+
+          <Button variant="contained" color="primary" onClick={closeModal}>
+            취소하기
+          </Button>
+        </div>
+      </Fade>
+    </Modal>
   )
 }
 
