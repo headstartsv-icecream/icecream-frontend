@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { memo } from 'react'
+import { HEADER_HEIGHT } from 'src/models/constants'
 import styled from 'styled-components'
 
 const MaxWidth = styled.div`
   min-width: 2rem;
-  max-width: 4rem;
-  max-height: 4rem;
+  max-width: ${HEADER_HEIGHT};
+  max-height: ${HEADER_HEIGHT};
 
   transition: transform 0.2s cubic-bezier(0.4, 0, 1, 1) 0s;
 

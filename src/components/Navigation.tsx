@@ -2,7 +2,7 @@
 import { MenuOutlined } from '@ant-design/icons'
 import useScrollPosition from '@react-hook/window-scroll'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { DESKTOP_MIN_WIDTH, TABLET_MIN_WIDTH } from 'src/models/constants'
 import styled from 'styled-components'
 import IcezamLogo from './atoms/IcezamLogo'
