@@ -33,6 +33,7 @@ export default class IcecreamDocument extends Document {
     return (
       <Html lang="ko">
         <Head>
+          <link rel="apple-touch-icon" href="/icezam-logo.png" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black" />
           {process.env.NODE_ENV === 'production' && (
