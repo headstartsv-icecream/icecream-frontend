@@ -7,8 +7,7 @@ import styled, { keyframes } from 'styled-components'
 import OverlayModal from './OverlayModal'
 
 const FlexContainerColumn = styled.div`
-  min-height: 300px;
-  height: 100vh;
+  min-height: 100vh;
   padding-top: 4rem;
   display: flex;
   flex-flow: column nowrap;
@@ -44,7 +43,7 @@ const breathingButton = keyframes`
     transform: scale(1,1);
   }
   50% {
-    transform: scale(1.05,1.05);
+    transform: scale(1.1,1.1);
   }
 `
 
