@@ -35,7 +35,7 @@ function getSearchingStatusFrom(recordingCount: number): [string, string] {
     case 3:
       return ['현재까지 검색 결과가 없습니다.', '마지막 시도']
     default:
-      return ['너무 많은 검색 시도', '그만 시도 하세요']
+      return ['너무 많은 검색 시도.. 그만 시도 하세요!', '(이 메시지가 보이면 오류)']
   }
 }
 
@@ -64,11 +64,11 @@ function getAudioBlobFromAudioRecorder(audioRecorder: RecordRTC) {
 
 type Props = {
   isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
-  setMusicInfo: (info: Record<string, unknown>) => void
+  onClose: () => void
+  setMusicInfo: (info: Record<string, unknown> | null) => void
 }
 
-function RecorderModal({ isOpen, setIsOpen, setMusicInfo }: Props) {
+function RecorderModal({ isOpen, onClose, setMusicInfo }: Props) {
   const audioStream = useRef<MediaStream | null>(null)
   const audioRecorder = useRef<RecordRTC | null>(null)
 
@@ -76,10 +76,6 @@ function RecorderModal({ isOpen, setIsOpen, setMusicInfo }: Props) {
   const isMounted = useMounted()
 
   const classes = useStyles()
-
-  function closeModal() {
-    setIsOpen(false)
-  }
 
   async function recordAudio(minimumRecordingDuration: number) {
     if (!audioStream.current || !audioRecorder.current) {
@@ -124,13 +120,14 @@ function RecorderModal({ isOpen, setIsOpen, setMusicInfo }: Props) {
         if (isMounted.current) {
           if (newMusicInfo.matches.length) {
             setMusicInfo(newMusicInfo)
-          } else if (recordingCount !== 3) {
-            console.log("Didn't detect the audio")
-            setRecordingCount((prev) => prev + 1)
           } else {
             console.log("Didn't detect the audio")
-            setMusicInfo({})
-            closeModal()
+            if (recordingCount !== 3) {
+              setRecordingCount((prev) => prev + 1)
+            } else {
+              setMusicInfo(null)
+              onClose()
+            }
           }
         }
       }
@@ -145,7 +142,7 @@ function RecorderModal({ isOpen, setIsOpen, setMusicInfo }: Props) {
       aria-describedby="transition-modal-description"
       className={classes.modal}
       open={isOpen}
-      onClose={closeModal}
+      onClose={onClose}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
@@ -160,7 +157,7 @@ function RecorderModal({ isOpen, setIsOpen, setMusicInfo }: Props) {
           <h2>{getSearchingStatusFrom(recordingCount)[0]}</h2>
           <h3>{getSearchingStatusFrom(recordingCount)[1]}</h3>
 
-          <Button variant="contained" color="primary" onClick={closeModal}>
+          <Button variant="contained" color="primary" onClick={onClose}>
             취소하기
           </Button>
         </div>
