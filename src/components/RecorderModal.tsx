@@ -65,10 +65,11 @@ function getAudioBlobFromAudioRecorder(audioRecorder: RecordRTC) {
 type Props = {
   isOpen: boolean
   onClose: () => void
+  onFailure: () => void
   setMusicInfo: (info: Record<string, unknown> | null) => void
 }
 
-function RecorderModal({ isOpen, onClose, setMusicInfo }: Props) {
+function RecorderModal({ isOpen, onClose, onFailure, setMusicInfo }: Props) {
   const audioStream = useRef<MediaStream | null>(null)
   const audioRecorder = useRef<RecordRTC | null>(null)
 
@@ -127,6 +128,7 @@ function RecorderModal({ isOpen, onClose, setMusicInfo }: Props) {
             } else {
               setMusicInfo(null)
               onClose()
+              onFailure()
             }
           }
         }
