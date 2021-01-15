@@ -1,14 +1,16 @@
 import Image from 'next/image'
+import router from 'next/router'
 import { useEffect, useState } from 'react'
 import DragDrop from 'src/components/atoms/DragDrop'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import RecorderModal from 'src/components/RecorderModal'
+import { HEADER_HEIGHT } from 'src/models/constants'
 import styled, { keyframes } from 'styled-components'
 
 const FlexContainerColumn = styled.div`
   min-height: 100vh;
-  padding-top: 4rem;
+  padding-top: ${HEADER_HEIGHT};
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -64,11 +66,24 @@ const FlexContainer = styled.div`
 `
 
 function HomePage() {
-  const [musicInfo, setMusicInfo] = useState({})
+  const [musicInfo, setMusicInfo] = useState<Record<string, any> | null>(null)
   const [isRecorderModalOpen, setIsRecorderModalOpen] = useState(false)
 
+  function openModal() {
+    setIsRecorderModalOpen(true)
+  }
+
+  function closeModal() {
+    setIsRecorderModalOpen(false)
+  }
+
   useEffect(() => {
-    console.log(musicInfo)
+    if (musicInfo) {
+      console.log(musicInfo)
+      // const url = getMusicDetailUrlByMusicInfoFromServer(newMusicInfo)
+      const url = `/musics/${musicInfo.track.key}`
+      router.push(url)
+    }
   }, [musicInfo])
 
   return (
@@ -83,9 +98,7 @@ function HomePage() {
               alt="icezam-logo"
               width={500}
               height={500}
-              onClick={() => {
-                setIsRecorderModalOpen(true)
-              }}
+              onClick={openModal}
             />
           </MaxWidth>
         </FlexContainerColumn>
@@ -93,7 +106,7 @@ function HomePage() {
         {isRecorderModalOpen && (
           <RecorderModal
             isOpen={isRecorderModalOpen}
-            setIsOpen={setIsRecorderModalOpen}
+            onClose={closeModal}
             setMusicInfo={setMusicInfo}
           />
         )}
