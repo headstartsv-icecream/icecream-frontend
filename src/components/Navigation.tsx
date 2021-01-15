@@ -1,4 +1,6 @@
 /* eslint-disable no-constant-condition */
+import { MenuOutlined } from '@ant-design/icons'
+import useScrollPosition from '@react-hook/window-scroll'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { DESKTOP_MIN_WIDTH, TABLET_MIN_WIDTH } from 'src/models/constants'
@@ -103,8 +105,6 @@ function Navigation() {
     setDoesDrawerOpen(false)
   }
 
-// eslint-disable-next-line no-empty-pattern
-function Navigation({}: Props) {
   return (
     <nav>
       <FlexContainerBetween isTop={scrollY === 0}>

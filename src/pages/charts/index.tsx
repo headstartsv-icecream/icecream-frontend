@@ -1,14 +1,18 @@
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
+import styled from 'styled-components'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {}
+const PaddingTop = styled.div`
+  padding-top: 5rem;
+`
 
-// eslint-disable-next-line no-empty-pattern
-function ChartsPage({}: Props) {
+function ChartsPage() {
   return (
     <PageTitle title="Icecream Music - Charts">
-      <PageLayout>Charts</PageLayout>
+      <PageLayout>
+        <PaddingTop />
+        Charts
+      </PageLayout>
     </PageTitle>
   )
 }

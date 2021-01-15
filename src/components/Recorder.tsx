@@ -116,7 +116,7 @@ function Recorder({ setMusicInfo }: Props) {
       const base64Encoding = await getBase64EncodingFrom(audioBlob)
 
       console.log('Searching audio blob...')
-      const musicInfo = await fetchDetectedMusicInfo(base64Encoding)
+      const newMusicInfo = await fetchDetectedMusicInfo(base64Encoding)
 
       if (newMusicInfo.matches.length) {
         setMusicInfo(newMusicInfo)

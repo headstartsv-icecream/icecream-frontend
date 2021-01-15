@@ -1,4 +1,6 @@
+/* eslint-disable react/no-danger */
 import Document, { DocumentContext, Html, Head, Main, NextScript } from 'next/document'
+import { GOOGLE_ANALYTICS_TRACKING_ID } from 'src/utils/google-analytics'
 import { ServerStyleSheet } from 'styled-components'
 
 export default class IcecreamDocument extends Document {
@@ -33,6 +35,26 @@ export default class IcecreamDocument extends Document {
         <Head>
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+          {process.env.NODE_ENV === 'production' && (
+            <>
+              <script
+                async
+                src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_TRACKING_ID}`}
+              />
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${GOOGLE_ANALYTICS_TRACKING_ID}', {
+                      page_path: window.location.pathname,
+                    });
+                  `,
+                }}
+              />
+            </>
+          )}
         </Head>
         <body>
           <Main />
