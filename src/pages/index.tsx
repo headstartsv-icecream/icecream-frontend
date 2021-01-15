@@ -10,20 +10,16 @@ const FlexContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
 `
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const gif = require('../../public/equalizer.gif')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const logo = require('../../public/icezam-logo.png')
 
 function HomePage() {
   const [musicInfo, setMusicInfo] = useState({})
-  const [file, setFile] = useState<File | null>(null)
-
-  async function handleClickMusicDetectionButton() {
-    if (file) {
-      const base64Encoding = await getBase64EncodingFrom(file)
-      const musicInfo = await fetchDetectedMusicInfo(base64Encoding)
-      console.log(musicInfo)
-    }
-  }
-
-  console.log(file)
+  useEffect(() => {
+    console.log(musicInfo)
+  }, [musicInfo])
 
   return (
     <PageTitle title="Icezam - 음악을 검색하고, 다양한 사람들의 음악에 대한 반응을 알아보는 공간">
