@@ -1,12 +1,11 @@
 import { CloseOutlined } from '@ant-design/icons'
 import Link from 'next/link'
-import { useEffect } from 'react'
 import useStopBodyScroll from 'src/hooks/useStopBodyScroll'
 import styled from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
 import IcezamLogo from './atoms/IcezamLogo'
 
-const AbsolutePosition = styled.div<{ isDrawerOpen: boolean }>`
+const FixedPosition = styled.div<{ isDrawerOpen: boolean }>`
   width: 100%;
   height: 100%;
   position: fixed;
@@ -57,22 +56,11 @@ type Props = {
 }
 
 function NavigationDrawer({ isOpen, onClose }: Props) {
-  useEffect(() => {
-    function closeDrawerWhenEscapeKeyPressed(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        onClose()
-      }
-    }
-
-    document.addEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
-    return () => document.removeEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
-  }, [onClose])
-
   useStopBodyScroll(isOpen)
 
   return (
-    <ClientPortal>
-      <AbsolutePosition isDrawerOpen={isOpen}>
+    <ClientPortal isOpen={isOpen} onClose={onClose}>
+      <FixedPosition isDrawerOpen={isOpen}>
         <FlexContainerBetween>
           <div onClick={onClose} onKeyDown={onClose} role="button" tabIndex={0}>
             <IcezamLogo />
@@ -91,7 +79,7 @@ function NavigationDrawer({ isOpen, onClose }: Props) {
             </Link>
           </li>
         </FlexContainerColumn>
-      </AbsolutePosition>
+      </FixedPosition>
     </ClientPortal>
   )
 }
