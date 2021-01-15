@@ -86,17 +86,6 @@ function Navigation() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const scrollY = useScrollPosition()
 
-  useEffect(() => {
-    document.addEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
-    return () => document.removeEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
-  }, [])
-
-  function closeDrawerWhenEscapeKeyPressed(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      setIsDrawerOpen(false)
-    }
-  }
-
   function openDrawer() {
     setIsDrawerOpen(true)
   }
@@ -125,7 +114,7 @@ function Navigation() {
           <HamburgerIcon onClick={openDrawer} />
         </RightNavigation>
       </FlexContainerBetween>
-      <NavigationDrawer closeDrawer={closeDrawer} isDrawerOpen={isDrawerOpen} />
+      <NavigationDrawer isOpen={isDrawerOpen} onClose={closeDrawer} />
     </nav>
   )
 }
