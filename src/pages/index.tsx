@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import router from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import DragDrop from 'src/components/atoms/DragDrop'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
@@ -64,13 +64,21 @@ const AnimatedImage = styled(Image)`
 
 const FlexContainer = styled.div`
   display: flex;
-  flex-flow: row nowrap;
 `
 
 function HomePage() {
   const [musicInfo, setMusicInfo] = useState<Record<string, any> | null | undefined>()
   const [isRecorderModalOpen, , openRecorderModal, closeRecorderModal] = useBoolean(false)
-  const [isSearchFailureToastOpen, , openSearchFailureToast, closeSearchFailureToast] = useBoolean()
+  const [isSearchFailureToastOpen, , openSearchFailureToast, closeSearchFailureToast] = useBoolean(
+    false
+  )
+
+  const handleSearchFailure = useCallback(() => {
+    closeRecorderModal()
+    openSearchFailureToast()
+    // closeRecorderModal, openSearchFailureToast는 메모이제이션 되어 있다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (musicInfo) {
@@ -104,12 +112,14 @@ function HomePage() {
           <RecorderModal
             isOpen={isRecorderModalOpen}
             onClose={closeRecorderModal}
-            onFailure={openSearchFailureToast}
+            onFailure={handleSearchFailure}
             setMusicInfo={setMusicInfo}
           />
         )}
 
-        <SearchFailureToast isOpen={isSearchFailureToastOpen} onClose={closeSearchFailureToast} />
+        {isSearchFailureToastOpen && (
+          <SearchFailureToast isOpen={isSearchFailureToastOpen} onClose={closeSearchFailureToast} />
+        )}
 
         <DragDrop setMusicInfo={setMusicInfo} />
 
