@@ -1,5 +1,6 @@
 import { CloseOutlined } from '@ant-design/icons'
 import Link from 'next/link'
+import { memo } from 'react'
 import useStopBodyScroll from 'src/hooks/useStopBodyScroll'
 import styled from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
@@ -84,4 +85,4 @@ function NavigationDrawer({ isOpen, onClose }: Props) {
   )
 }
 
-export default NavigationDrawer
+export default memo(NavigationDrawer)

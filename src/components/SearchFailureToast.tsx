@@ -1,4 +1,5 @@
 import { CloseOutlined, ExclamationCircleFilled } from '@ant-design/icons'
+import { memo } from 'react'
 import { TABLET_MIN_WIDTH } from 'src/models/constants'
 import styled, { css, keyframes } from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
@@ -108,4 +109,4 @@ function SearchFailureToast({ isOpen, onClose }: Props) {
   )
 }
 
-export default SearchFailureToast
+export default memo(SearchFailureToast)

@@ -27,12 +27,28 @@
     ],
     "description": "Function Component with Props"
   },
+  "useCallback": {
+    "prefix": "useCallback",
+    "body": ["const $1 = useCallback(($2) => {", "  $3", "}, [])"]
+  },
   "useEffect": {
     "prefix": "useEffect",
-    "body": ["useEffect(() => {", "  ", "}, [])"]
+    "body": ["useEffect(() => {", "  $1", "}, [])"]
+  },
+  "useMemo": {
+    "prefix": "useMemo",
+    "body": ["const $1 = useMemo(() => {", "  $2", "}, [])"]
+  },
+  "useRef": {
+    "prefix": "useRef",
+    "body": ["const $1 = useState($2)"]
   },
   "useState": {
     "prefix": "useState",
-    "body": ["const [$1, $2] = useState()"]
+    "body": ["const [$1, $2] = useState($3)"]
+  },
+  "Console Log Rendered": {
+    "prefix": "clr",
+    "body": "console.log('${TM_FILENAME_BASE} rendered')"
   }
 }
