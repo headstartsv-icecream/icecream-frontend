@@ -13,7 +13,6 @@ import useBoolean from 'src/hooks/useBoolean'
 
 const FlexContainerBetween = styled.div<{ isTop: boolean }>`
   display: flex;
-  flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
 
@@ -46,7 +45,6 @@ const FlexContainerBetween = styled.div<{ isTop: boolean }>`
 const FlexContainer = styled.div`
   margin: 0 1rem;
   display: flex;
-  flex-flow: row nowrap;
   align-items: center;
   gap: 1rem;
 

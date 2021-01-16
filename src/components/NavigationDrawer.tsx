@@ -33,7 +33,6 @@ const FixedPosition = styled.div<{ isDrawerOpen: boolean }>`
 const FlexContainerBetween = styled.div`
   margin: 0 1rem;
   display: flex;
-  flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
 `
