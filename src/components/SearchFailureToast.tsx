@@ -1,12 +1,12 @@
 import { CloseOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import { memo } from 'react'
 import { TABLET_MIN_WIDTH } from 'src/models/constants'
-import styled, { css, keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
 
 const appear = keyframes`
   0% {
-    opacity: 0.5;
+    opacity: 0;
     transform: translateY(-1rem);
   }
 
@@ -16,44 +16,22 @@ const appear = keyframes`
   }
 `
 
-const disappear = keyframes`
-  0% {
-    opacity: 1;
-    transform: translateY(0); 
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(0.5rem);
-  }
-`
-
-const FixedPosition = styled.div<{ isModalOpen?: boolean }>`
-  width: 100%;
-  position: fixed;
-  bottom: 2rem;
-  z-index: 1;
-  opacity: ${(p) => (p.isModalOpen ? 1 : 0)};
-
-  display: flex;
-  justify-content: center;
-
-  ${(p) =>
-    p.isModalOpen === true
-      ? css`
-          animation: ${appear} 0.2s cubic-bezier(0.36, 0.11, 0.89, 0.32);
-        `
-      : p.isModalOpen === false
-      ? css`
-          animation: ${disappear} 0.2s cubic-bezier(0.36, 0.11, 0.89, 0.32);
-        `
-      : ''};
-`
-
-const FlexContainer = styled.div`
+const FixedPosition = styled.div`
   width: 80vw;
   min-width: 250px;
   max-width: 600px;
+
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
+
+  display: flex;
+  justify-content: center;
+`
+
+const FlexContainer = styled.div`
   padding: 1rem;
   border: 1px solid #48b;
   border-radius: 0.5rem;
@@ -65,6 +43,8 @@ const FlexContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+
+  animation: ${appear} 0.5s ease-out;
 
   @media (max-width: ${TABLET_MIN_WIDTH}) {
     div {
@@ -88,14 +68,14 @@ const StyledCloseOutlined = styled(CloseOutlined)`
 `
 
 type Props = {
-  isOpen: boolean | undefined
+  isOpen: boolean
   onClose: () => void
 }
 
 function SearchFailureToast({ isOpen, onClose }: Props) {
   return (
-    <ClientPortal isOpen={isOpen ?? false} onClose={onClose}>
-      <FixedPosition isModalOpen={isOpen}>
+    <ClientPortal isOpen={isOpen} onClose={onClose}>
+      <FixedPosition>
         <FlexContainer>
           <StyledExclamationCircle />
           <div>
