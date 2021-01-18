@@ -83,26 +83,15 @@ const RightNavigation = styled(FlexContainer)`
 `
 
 function Navigation() {
-  const [doesDrawerOpen, setDoesDrawerOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const scrollY = useScrollPosition()
 
-  useEffect(() => {
-    document.addEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
-    return () => document.removeEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
-  }, [])
-
-  function closeDrawerWhenEscapeKeyPressed(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      setDoesDrawerOpen(false)
-    }
-  }
-
   function openDrawer() {
-    setDoesDrawerOpen(true)
+    setIsDrawerOpen(true)
   }
 
   function closeDrawer() {
-    setDoesDrawerOpen(false)
+    setIsDrawerOpen(false)
   }
 
   return (
@@ -125,7 +114,7 @@ function Navigation() {
           <HamburgerIcon onClick={openDrawer} />
         </RightNavigation>
       </FlexContainerBetween>
-      <NavigationDrawer closeDrawer={closeDrawer} doesDrawerOpen={doesDrawerOpen} />
+      <NavigationDrawer isOpen={isDrawerOpen} onClose={closeDrawer} />
     </nav>
   )
 }

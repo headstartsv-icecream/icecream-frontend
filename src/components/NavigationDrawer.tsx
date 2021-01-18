@@ -1,11 +1,12 @@
 import { CloseOutlined } from '@ant-design/icons'
 import Link from 'next/link'
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import useStopBodyScroll from 'src/hooks/useStopBodyScroll'
 import styled from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
 import IcezamLogo from './atoms/IcezamLogo'
 
-const AbsolutePosition = styled.div<{ doesDrawerOpen: boolean }>`
+const AbsolutePosition = styled.div<{ isDrawerOpen: boolean }>`
   width: 100%;
   height: 100%;
   position: fixed;
@@ -15,7 +16,7 @@ const AbsolutePosition = styled.div<{ doesDrawerOpen: boolean }>`
   overflow-y: auto;
   background-color: #111;
 
-  ${(p) => (p.doesDrawerOpen ? 'transform: translate(0, 0);' : 'transform: translate(101%, 0);')}
+  ${(p) => (p.isDrawerOpen ? 'transform: translate(0, 0);' : 'transform: translate(101%, 0);')}
   transition: transform 0.3s cubic-bezier(0.4, 0.2, 0, 1);
 
   a,
@@ -51,35 +52,32 @@ const FlexContainerColumn = styled.ul`
 `
 
 type Props = {
-  closeDrawer: () => void
-  doesDrawerOpen: boolean
+  isOpen: boolean
+  onClose: () => void
 }
 
-function NavigationDrawer({ closeDrawer, doesDrawerOpen }: Props) {
-  const previousScrollY = useRef<number>()
-
-  useLayoutEffect(() => {
-    if (doesDrawerOpen) {
-      previousScrollY.current = window.scrollY
-      document.body.style.position = 'fixed'
-      document.body.style.top = `-${previousScrollY.current}px`
-    } else {
-      document.body.style.position = ''
-      document.body.style.top = ''
-      if (previousScrollY.current) {
-        window.scrollTo(0, previousScrollY.current)
+function NavigationDrawer({ isOpen, onClose }: Props) {
+  useEffect(() => {
+    function closeDrawerWhenEscapeKeyPressed(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        onClose()
       }
     }
-  }, [doesDrawerOpen, previousScrollY])
+
+    document.addEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
+    return () => document.removeEventListener('keydown', closeDrawerWhenEscapeKeyPressed)
+  }, [onClose])
+
+  useStopBodyScroll(isOpen)
 
   return (
     <ClientPortal>
-      <AbsolutePosition doesDrawerOpen={doesDrawerOpen}>
+      <AbsolutePosition isDrawerOpen={isOpen}>
         <FlexContainerBetween>
-          <div onClick={closeDrawer} onKeyDown={closeDrawer} role="button" tabIndex={0}>
+          <div onClick={onClose} onKeyDown={onClose} role="button" tabIndex={0}>
             <IcezamLogo />
           </div>
-          <StyledCloseOutlined onClick={closeDrawer} />
+          <StyledCloseOutlined onClick={onClose} />
         </FlexContainerBetween>
         <FlexContainerColumn>
           <li>
