@@ -19,7 +19,7 @@ const appear = keyframes`
 const FixedPosition = styled.div`
   width: 80vw;
   min-width: 250px;
-  max-width: 600px;
+  max-width: 550px;
 
   position: fixed;
   bottom: 2rem;
@@ -32,6 +32,7 @@ const FixedPosition = styled.div`
 `
 
 const FlexContainer = styled.div`
+  width: 100%;
   padding: 1rem;
   border: 1px solid #48b;
   border-radius: 0.5rem;

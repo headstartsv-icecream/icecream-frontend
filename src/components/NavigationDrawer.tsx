@@ -14,7 +14,8 @@ const FixedPosition = styled.div<{ isDrawerOpen: boolean }>`
   z-index: 1;
 
   overflow-y: auto;
-  background-color: #111;
+  background-color: #222;
+  pointer-events: auto; // body의 scroll 방지 시 none 상속 방지
 
   ${(p) => (p.isDrawerOpen ? 'transform: translate(0, 0);' : 'transform: translate(101%, 0);')}
   transition: transform 0.3s cubic-bezier(0.4, 0.2, 0, 1);
