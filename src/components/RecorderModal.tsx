@@ -1,10 +1,10 @@
+import Image from 'next/image'
 import useAudioRecorder from 'src/hooks/useAudioRecorder'
 import useStopBodyScroll from 'src/hooks/useStopBodyScroll'
+import { MOBILE_MIN_WIDTH } from 'src/models/constants'
 import styled, { keyframes } from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const gif = require('../../public/equalizer.gif')
+import IcezamLogo from './atoms/IcezamLogo'
 
 const fadeIn = keyframes`
   0% {
@@ -16,22 +16,96 @@ const fadeIn = keyframes`
   }
 `
 
+const ripple = keyframes`
+  50% {
+    opacity: .2;
+  }
+
+  100% {
+    height: 80vmin;
+    width: 80vmin;
+    opacity: 0;
+  }
+`
+
 const FixedPosition = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
   top: 0;
   z-index: 1;
+  pointer-events: auto; // body의 scroll 방지 시 none 상속 방지
 
+  overflow-y: auto;
   background-image: linear-gradient(to bottom, #0bf, #066aff);
+
+  display: flex;
+  align-items: center;
 
   animation: ${fadeIn} 0.5s ease-out;
 `
 
-const FlexContainer = styled.div`
+const Margin = styled.div`
+  margin: 0 1rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+`
+
+const Wave = styled.div<{ delay: number }>`
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+
+  opacity: 0;
+  background-color: white;
+  border-radius: 50%;
+
+  animation: ${ripple} 3s cubic-bezier(0.36, 0.11, 0.89, 0.32) ${(p) => p.delay}s infinite;
+`
+
+const FlexContainerColumn = styled.div`
+  width: 100%;
+  margin: 1rem;
+
   display: flex;
+  flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
+
+  * {
+    color: #eee;
+  }
+`
+
+const breathing = keyframes`
+  0%, 100% {
+    transform: scale(1,1);
+  }
+  50% {
+    transform: scale(1.1,1.1);
+  }
+`
+
+const AnimatedImage = styled(Image)`
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 2px;
+  animation: ${breathing} 3s infinite ease-in-out;
+`
+
+const CancelButton = styled.button`
+  height: 50px;
+  width: ${MOBILE_MIN_WIDTH};
+  background-color: rgba(39, 6, 128, 0.3);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
 `
 
 function getSearchingStatusFrom(recordingCount: number): [string, string] {
@@ -57,22 +131,26 @@ type Props = {
 }
 
 function RecorderModal({ isOpen, onClose, onFailure, setMusicInfo }: Props) {
-  const recordingCount = useAudioRecorder({ onFailure, setMusicInfo })
+  const recordingCount = useAudioRecorder({ onFailure: () => null, setMusicInfo })
 
   useStopBodyScroll(isOpen)
 
   return (
     <ClientPortal isOpen={isOpen} onClose={onClose}>
       <FixedPosition>
-        <FlexContainer>
-          <h1 id="transition-modal-title">Hearing your music...</h1>
-          <img src={gif} alt="Searching your music..." />
-          <p id="transition-modal-description">react-transition-group animates me.</p>
-          <h2>{getSearchingStatusFrom(recordingCount)[0]}</h2>
+        <Margin onClick={onClose} onKeyDown={onClose} role="button" tabIndex={0}>
+          <IcezamLogo />
+        </Margin>
+        <Wave delay={0.3} />
+        <Wave delay={0.6} />
+        <Wave delay={1.2} />
+        <Wave delay={2.4} />
+        <FlexContainerColumn>
+          <AnimatedImage src="/icezam-logo.png" alt="icezam-logo" width={250} height={250} />
+          <h1>{getSearchingStatusFrom(recordingCount)[0]}</h1>
           <h3>{getSearchingStatusFrom(recordingCount)[1]}</h3>
-
-          <button onClick={onClose}>취소하기</button>
-        </FlexContainer>
+          <CancelButton onClick={onClose}>취소</CancelButton>
+        </FlexContainerColumn>
       </FixedPosition>
     </ClientPortal>
   )
