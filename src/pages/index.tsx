@@ -42,7 +42,7 @@ const MaxWidth = styled.div`
   max-width: 350px;
 `
 
-const breathingButton = keyframes`
+const breathing = keyframes`
   0%, 100% {
     transform: scale(1,1);
   }
@@ -55,7 +55,7 @@ const AnimatedImage = styled(Image)`
   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
   stroke: rgba(255, 255, 255, 0.1);
   stroke-width: 2px;
-  animation: ${breathingButton} 3s infinite ease-in-out;
+  animation: ${breathing} 3s infinite ease-in-out;
 
   :hover {
     cursor: pointer;

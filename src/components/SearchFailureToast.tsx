@@ -68,6 +68,10 @@ const StyledCloseOutlined = styled(CloseOutlined)`
   right: 1rem;
 `
 
+const P = styled.p`
+  margin: 0;
+`
+
 type Props = {
   isOpen: boolean
   onClose: () => void
@@ -81,7 +85,7 @@ function SearchFailureToast({ isOpen, onClose }: Props) {
           <StyledExclamationCircle />
           <div>
             <h2>일치하는 콘텐츠를 찾을 수 없습니다.</h2>
-            <p>컴퓨터에 곡이 또렷하게 들리는지 확인하고 다시 시도하세요.</p>
+            <P>컴퓨터에 곡이 또렷하게 들리는지 확인하고 다시 시도하세요.</P>
           </div>
           <StyledCloseOutlined onClick={onClose} />
         </FlexContainer>
