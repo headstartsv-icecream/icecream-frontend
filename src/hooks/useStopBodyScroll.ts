@@ -1,19 +1,22 @@
-import { useRef, useLayoutEffect } from 'react'
+import { useEffect } from 'react'
 
 function useStopBodyScroll(when: boolean) {
-  const previousScrollY = useRef(0)
-
-  useLayoutEffect(() => {
+  useEffect(() => {
+    const style = document.body.style
+    const scrollY = window.scrollY
     if (when) {
-      previousScrollY.current = window.scrollY
-      document.body.style.position = 'fixed'
-      document.body.style.top = `-${previousScrollY.current}px`
-    } else {
-      document.body.style.position = ''
-      document.body.style.top = ''
-      window.scrollTo(0, previousScrollY.current)
+      style.pointerEvents = 'none'
+      style.position = 'fixed'
+      style.top = `-${scrollY}px`
+
+      return () => {
+        style.removeProperty('pointer-events')
+        style.removeProperty('position')
+        style.removeProperty('top')
+        window.scrollTo(0, scrollY)
+      }
     }
-  }, [when, previousScrollY])
+  }, [when])
 }
 
 export default useStopBodyScroll

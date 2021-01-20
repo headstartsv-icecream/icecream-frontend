@@ -1,4 +1,5 @@
 import useAudioRecorder from 'src/hooks/useAudioRecorder'
+import useStopBodyScroll from 'src/hooks/useStopBodyScroll'
 import styled, { keyframes } from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
 
@@ -57,6 +58,8 @@ type Props = {
 
 function RecorderModal({ isOpen, onClose, onFailure, setMusicInfo }: Props) {
   const recordingCount = useAudioRecorder({ onFailure, setMusicInfo })
+
+  useStopBodyScroll(isOpen)
 
   return (
     <ClientPortal isOpen={isOpen} onClose={onClose}>

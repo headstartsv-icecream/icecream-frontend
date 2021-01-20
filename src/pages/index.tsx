@@ -76,9 +76,7 @@ function HomePage() {
   const handleSearchFailure = useCallback(() => {
     closeRecorderModal()
     openSearchFailureToast()
-    // closeRecorderModal, openSearchFailureToast는 메모이제이션 되어 있다.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [closeRecorderModal, openSearchFailureToast])
 
   useEffect(() => {
     if (musicInfo) {
