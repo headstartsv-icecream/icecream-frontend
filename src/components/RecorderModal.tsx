@@ -131,7 +131,7 @@ type Props = {
 }
 
 function RecorderModal({ isOpen, onClose, onFailure, setMusicInfo }: Props) {
-  const recordingCount = useAudioRecorder({ onFailure: () => null, setMusicInfo })
+  const recordingCount = useAudioRecorder({ onFailure, setMusicInfo })
 
   useStopBodyScroll(isOpen)
 
