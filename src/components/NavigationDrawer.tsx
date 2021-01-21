@@ -51,7 +51,7 @@ const FlexContainerColumn = styled.ul`
   list-style-type: none;
 `
 
-type Props = {
+export type Props = {
   isOpen: boolean
   onClose: () => void
 }
