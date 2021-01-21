@@ -1,21 +1,23 @@
 import { CloseOutlined } from '@ant-design/icons'
 import Link from 'next/link'
-import { useLayoutEffect, useRef } from 'react'
+import { memo } from 'react'
+import useStopBodyScroll from 'src/hooks/useStopBodyScroll'
 import styled from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
 import IcezamLogo from './atoms/IcezamLogo'
 
-const AbsolutePosition = styled.div<{ doesDrawerOpen: boolean }>`
+const FixedPosition = styled.div<{ isDrawerOpen: boolean }>`
   width: 100%;
   height: 100%;
   position: fixed;
   inset: 0;
   z-index: 1;
+  pointer-events: auto; // body의 scroll 방지 시 none 상속 방지
 
   overflow-y: auto;
-  background-color: #111;
+  background-color: #222;
 
-  ${(p) => (p.doesDrawerOpen ? 'transform: translate(0, 0);' : 'transform: translate(101%, 0);')}
+  ${(p) => (p.isDrawerOpen ? 'transform: translate(0, 0);' : 'transform: translate(101%, 0);')}
   transition: transform 0.3s cubic-bezier(0.4, 0.2, 0, 1);
 
   a,
@@ -32,7 +34,6 @@ const AbsolutePosition = styled.div<{ doesDrawerOpen: boolean }>`
 const FlexContainerBetween = styled.div`
   margin: 0 1rem;
   display: flex;
-  flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
 `
@@ -51,35 +52,21 @@ const FlexContainerColumn = styled.ul`
 `
 
 type Props = {
-  closeDrawer: () => void
-  doesDrawerOpen: boolean
+  isOpen: boolean
+  onClose: () => void
 }
 
-function NavigationDrawer({ closeDrawer, doesDrawerOpen }: Props) {
-  const previousScrollY = useRef<number>()
-
-  useLayoutEffect(() => {
-    if (doesDrawerOpen) {
-      previousScrollY.current = window.scrollY
-      document.body.style.position = 'fixed'
-      document.body.style.top = `-${previousScrollY.current}px`
-    } else {
-      document.body.style.position = ''
-      document.body.style.top = ''
-      if (previousScrollY.current) {
-        window.scrollTo(0, previousScrollY.current)
-      }
-    }
-  }, [doesDrawerOpen, previousScrollY])
+function NavigationDrawer({ isOpen, onClose }: Props) {
+  useStopBodyScroll(isOpen)
 
   return (
-    <ClientPortal>
-      <AbsolutePosition doesDrawerOpen={doesDrawerOpen}>
+    <ClientPortal isOpen={isOpen} onClose={onClose}>
+      <FixedPosition isDrawerOpen={isOpen}>
         <FlexContainerBetween>
-          <div onClick={closeDrawer} onKeyDown={closeDrawer} role="button" tabIndex={0}>
+          <div onClick={onClose} onKeyDown={onClose} role="button" tabIndex={0}>
             <IcezamLogo />
           </div>
-          <StyledCloseOutlined onClick={closeDrawer} />
+          <StyledCloseOutlined onClick={onClose} />
         </FlexContainerBetween>
         <FlexContainerColumn>
           <li>
@@ -93,9 +80,9 @@ function NavigationDrawer({ closeDrawer, doesDrawerOpen }: Props) {
             </Link>
           </li>
         </FlexContainerColumn>
-      </AbsolutePosition>
+      </FixedPosition>
     </ClientPortal>
   )
 }
 
-export default NavigationDrawer
+export default memo(NavigationDrawer)
