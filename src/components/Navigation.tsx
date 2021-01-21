@@ -2,7 +2,6 @@
 import { MenuOutlined } from '@ant-design/icons'
 import useScrollPosition from '@react-hook/window-scroll'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import { DESKTOP_MIN_WIDTH, TABLET_MIN_WIDTH } from 'src/models/constants'
 import styled from 'styled-components'
 import IcezamLogo from './atoms/IcezamLogo'
@@ -10,10 +9,10 @@ import LoginButton from './LoginButton'
 import LogoutButton from './LogoutButton'
 import SearchForm from './atoms/SearchForm'
 import NavigationDrawer from './NavigationDrawer'
+import useBoolean from 'src/hooks/useBoolean'
 
 const FlexContainerBetween = styled.div<{ isTop: boolean }>`
   display: flex;
-  flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
 
@@ -46,7 +45,6 @@ const FlexContainerBetween = styled.div<{ isTop: boolean }>`
 const FlexContainer = styled.div`
   margin: 0 1rem;
   display: flex;
-  flex-flow: row nowrap;
   align-items: center;
   gap: 1rem;
 
@@ -83,16 +81,8 @@ const RightNavigation = styled(FlexContainer)`
 `
 
 function Navigation() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isDrawerOpen, , openDrawer, closeDrawer] = useBoolean(false)
   const scrollY = useScrollPosition()
-
-  function openDrawer() {
-    setIsDrawerOpen(true)
-  }
-
-  function closeDrawer() {
-    setIsDrawerOpen(false)
-  }
 
   return (
     <nav>

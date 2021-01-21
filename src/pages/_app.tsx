@@ -8,9 +8,7 @@ import 'sanitize.css'
 import 'antd/dist/antd.css'
 
 const GlobalStyle = createGlobalStyle`
-  html,
-  body,
-  #root {
+  body {
     padding: 0;
     font-size: 16px;
   }
