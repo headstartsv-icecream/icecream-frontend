@@ -51,6 +51,15 @@ const breathing = keyframes`
   }
 `
 
+const clickFeedback = keyframes`
+  0%, 100% {
+    transform: scale(.9,.9);
+  }
+  50% {
+    transform: scale(1,1);
+  }
+`
+
 const AnimatedImage = styled(Image)`
   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
   stroke: rgba(255, 255, 255, 0.1);
@@ -59,6 +68,10 @@ const AnimatedImage = styled(Image)`
 
   :hover {
     cursor: pointer;
+  }
+
+  :active {
+    animation: ${clickFeedback} 0.5s normal ease-in-out;
   }
 `
 
