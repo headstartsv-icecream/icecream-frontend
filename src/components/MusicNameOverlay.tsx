@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import useStopBodyScroll from 'src/hooks/useStopBodyScroll'
+import { getBlackOrWhiteTextColorFrom } from 'src/utils/commons'
 import styled, { keyframes } from 'styled-components'
 import ClientPortal from './atoms/ClientPortal'
 
@@ -40,30 +41,18 @@ const FixedPosition = styled.div<{ backgroundColor: string }>`
   align-items: center;
 
   animation: ${slideToTop} 3s ease-in-out;
+
+  * {
+    color: ${(p) => getBlackOrWhiteTextColorFrom(p.backgroundColor)};
+  }
 `
 
-const Animated = styled.div<{ textColor: string }>`
+const Animated = styled.div`
   font-size: 2rem;
-  color: ${(p) => p.textColor};
   text-align: center;
 
   animation: ${appear} 0.5s ease-out;
 `
-
-const middleBrightness = (256 + 256 + 256) / 2
-
-function decideBlackOrWhiteFrom(backgroundColor: string) {
-  const r = parseInt(backgroundColor.slice(1, 3), 16)
-  const g = parseInt(backgroundColor.slice(3, 5), 16)
-  const b = parseInt(backgroundColor.slice(5, 7), 16)
-  const backgroundBrightness = r + g + b
-
-  if (backgroundBrightness < middleBrightness) {
-    return '#eee'
-  } else {
-    return '#222'
-  }
-}
 
 export type Props = {
   backgroundColor: string
@@ -90,7 +79,7 @@ function MusicNameOverlay({ backgroundColor, musicName }: Props) {
   return (
     <ClientPortal>
       <FixedPosition backgroundColor={backgroundColor}>
-        <Animated textColor={decideBlackOrWhiteFrom(backgroundColor)}>{musicName}</Animated>
+        <Animated>{musicName}</Animated>
       </FixedPosition>
     </ClientPortal>
   )
