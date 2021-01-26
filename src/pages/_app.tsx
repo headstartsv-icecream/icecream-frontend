@@ -6,6 +6,8 @@ import { pageview } from 'src/utils/google-analytics'
 import { createGlobalStyle } from 'styled-components'
 import 'sanitize.css'
 import 'antd/dist/antd.css'
+import { ApolloProvider } from '@apollo/client'
+import { client } from 'src/apollo/client'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -47,7 +49,9 @@ function IcecreamApp({ Component, pageProps }: AppProps) {
         />
       </Head>
       <GlobalStyle />
-      <Component {...pageProps} />
+      <ApolloProvider client={client}>
+        <Component {...pageProps} />
+      </ApolloProvider>
     </>
   )
 }
