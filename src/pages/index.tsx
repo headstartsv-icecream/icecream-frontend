@@ -1,18 +1,19 @@
 import Image from 'next/image'
-import router from 'next/router'
+import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import DragDrop from 'src/components/atoms/DragDrop'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import RecorderModal from 'src/components/RecorderModal'
 import SearchFailureToast from 'src/components/SearchFailureToast'
+import { useCreateOrModifyMusicMutation } from 'src/graphql/generated/types-and-hooks'
 import useBoolean from 'src/hooks/useBoolean'
 import { HEADER_HEIGHT } from 'src/models/constants'
 import styled, { keyframes } from 'styled-components'
 
 const FlexContainerColumn = styled.div`
   min-height: 100vh;
-  padding-top: ${HEADER_HEIGHT};
+  padding: ${HEADER_HEIGHT} 0 0 0;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -91,16 +92,27 @@ function HomePage() {
     openSearchFailureToast()
   }, [closeRecorderModal, openSearchFailureToast])
 
+  const router = useRouter()
+
+  const [createOrModifyMusic, { data }] = useCreateOrModifyMusicMutation()
+
   useEffect(() => {
     if (musicInfo) {
       console.log(musicInfo)
-      // const url = getMusicDetailUrlByMusicInfoFromServer(newMusicInfo)
-      const url = `/musics/${musicInfo.track.key}`
-      router.push(url)
+
+      const input = { shazamId: `${musicInfo.track.key}`, title: musicInfo.track.title }
+      createOrModifyMusic({ variables: { input } })
     } else if (musicInfo === null) {
       openSearchFailureToast()
     }
-  }, [musicInfo, openSearchFailureToast])
+  }, [createOrModifyMusic, musicInfo, openSearchFailureToast])
+
+  useEffect(() => {
+    if (data) {
+      const { id, title } = data.createOrModifyMusic
+      router.push(`/musics/${id}/${title}`)
+    }
+  }, [data, router])
 
   return (
     <PageTitle title="Icezam - 음악을 검색하고, 음악에 대한 다양한 사람들의 반응을 알아보는 공간">
