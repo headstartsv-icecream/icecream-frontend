@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
-import { musicData } from '../models/constants'
 import Link from 'next/link'
+import { fetchChartList } from '../utils/commons'
 
 const List = styled.ol`
   list-style-type: none;
@@ -13,26 +14,28 @@ const ListItem = styled.li`
   font-weight: bold;
   font-size: 1.5rem;
   border-bottom: 2px solid #d6d4d4;
-  margin-right: -4px;
+  /* margin-right: -4px; */
   padding: 25px;
   :hover {
     background-color: #eeecec;
+    transition: all 0.2s;
   }
 `
 const Title = styled.span`
   padding-left: 20px;
   color: black;
+  white-space: nowrap;
   :hover {
     color: blue;
   }
 `
 const SubTitle = styled.span`
   color: gray;
+  white-space: nowrap;
 `
 
 const Rank = styled.div`
   color: black;
-  padding-left: 10px;
   padding-right: 30px;
   font-size: 25px;
 `
@@ -55,7 +58,8 @@ const ThumbNail = styled.img`
 
 const CommentChip = styled.div`
   display: inline-block;
-  margin-left: 250px;
+  /* white-space: nowrap; */
+  margin-left: auto;
   padding: 0 25px;
   height: 50px;
   font-size: 16px;
@@ -64,26 +68,70 @@ const CommentChip = styled.div`
   background-color: #f1f1f1;
 `
 
+const Container = styled.div`
+  display: grid;
+  /* border: 3px solid red; */
+  grid-template-columns: 0.8fr minmax(0, 1fr);
+  @media screen and (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+  grid-gap: 30px;
+`
+const LeftWrapper = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: stretch;
+  /* border: 2px solid blue; */
+`
+
+const RightWrapper = styled.div`
+  display: flex;
+  padding-top: 10%;
+  flex-wrap: nowrap;
+  align-items: center;
+  flex-direction: column;
+  /* border: 2px solid blue; */
+
+  /* @media screen and (max-width: 960px) {
+    display: none;
+  } */
+`
+
+const CoverArt = styled.img`
+  border-radius: 8px;
+  width: 60%;
+  position: sticky;
+  top: 100px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  :hover {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    /* transition: all 0.3s; */
+  }
+`
+
 type Props = {
-  data: {
-    id: number
+  track: {
+    id: string
     title: string
-    artist: string
-    img?: string
+    subtitle: string
+    images: {
+      coverart: string
+    }
   }
   index: number
 }
 
-function RenderItems({ data, index }: Props) {
+function RenderItems({ track, index }: Props) {
   return (
-    <Link href="/music/1">
+    <Link href="/music/">
       <a href="/music/1">
         <ListItem>
           <FlexContainerRow>
             <Rank>{index}</Rank>
-            <ThumbNail src={data.img} />
+            <ThumbNail src={track.images.coverart} />
             <Title>
-              {data.title} <br /> <SubTitle>{data.artist}</SubTitle>
+              {track.title} <br /> <SubTitle>{track.subtitle}</SubTitle>
             </Title>
             <CommentChip>
               <TextsmsOutlinedIcon />
@@ -97,12 +145,31 @@ function RenderItems({ data, index }: Props) {
 }
 
 function MusicList() {
+  const [chartList, setChartList] = useState<any>()
+  useEffect(() => {
+    ;(async () => {
+      const result = await fetchChartList()
+      setChartList(result)
+      console.log(
+        (result.tracks as any[]).map((track) => {
+          return track.key
+        })
+      )
+    })()
+  }, [])
   return (
-    <List>
-      {musicData.map((data, index) => (
-        <RenderItems key={data.id} index={index + 1} data={data} />
-      ))}
-    </List>
+    <Container>
+      <LeftWrapper>
+        <List>
+          {(chartList?.tracks as any[])?.map((track, index) => (
+            <RenderItems key={track.key} index={index + 1} track={track} />
+          ))}
+        </List>
+      </LeftWrapper>
+      <RightWrapper>
+        <CoverArt src={chartList?.tracks[0].share.image} alt="coverart" />
+      </RightWrapper>
+    </Container>
   )
 }
 
