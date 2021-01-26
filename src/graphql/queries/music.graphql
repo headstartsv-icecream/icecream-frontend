@@ -1,0 +1,5 @@
+query Music($id: ID!) {
+  music(id: $id) {
+    id
+  }
+}
