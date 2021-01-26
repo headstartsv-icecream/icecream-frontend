@@ -12,7 +12,7 @@ const List = styled.ol`
 const ListItem = styled.li`
   display: list-item;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1rem;
   border-bottom: 2px solid #d6d4d4;
   /* margin-right: -4px; */
   padding: 25px;
@@ -23,8 +23,11 @@ const ListItem = styled.li`
 `
 const Title = styled.span`
   padding-left: 20px;
+  font-size: 1.1rem;
   color: black;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   :hover {
     color: blue;
   }
@@ -32,6 +35,8 @@ const Title = styled.span`
 const SubTitle = styled.span`
   color: gray;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const Rank = styled.div`
@@ -62,7 +67,7 @@ const CommentChip = styled.div`
   margin-left: auto;
   padding: 0 25px;
   height: 50px;
-  font-size: 16px;
+  font-size: 0.5rem;
   line-height: 50px;
   border-radius: 25px;
   background-color: #f1f1f1;
@@ -71,7 +76,7 @@ const CommentChip = styled.div`
 const Container = styled.div`
   display: grid;
   /* border: 3px solid red; */
-  grid-template-columns: 0.8fr minmax(0, 1fr);
+  grid-template-columns: 0.55fr minmax(0, 0.45fr);
   @media screen and (max-width: 960px) {
     grid-template-columns: 1fr;
   }
