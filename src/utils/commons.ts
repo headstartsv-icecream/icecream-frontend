@@ -38,10 +38,11 @@ export function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export async function fetchChartList() {
+export async function fetchChartTrack(countryCode: Record<string, string>) {
   try {
+    const code = countryCode.countryCode
     const response = await fetch(
-      'https://shazam.p.rapidapi.com/charts/track?locale=KR&listId=ip-country-chart-KR',
+      `https://shazam.p.rapidapi.com/charts/track?locale=${code}&listId=ip-country-chart-${code}`,
       {
         method: 'GET',
         redirect: 'follow',
@@ -55,24 +56,20 @@ export async function fetchChartList() {
   } catch (error) {
     console.error(error)
   }
-  // const myHeaders = new Headers()
-  // myHeaders.append('x-rapidapi-key', '136c4c4903msh0d6cd1cb5f43977p1a9bdajsnb51f51d6e7cc')
+}
 
-  // const requestOptions = {
-  //   method: 'GET',
-  //   headers: myHeaders,
-  //   redirect: 'follow',
-  // }
-
-  // fetch('https://shazam.p.rapidapi.com/charts/track?locale=KR&listId=ip-country-chart-KR', {
-  //   method: 'GET',
-  //   headers: {
-  //     'x-rapidapi-key': process.env.NEXT_PUBLIC_SHAZAM_API_KEY ?? '',
-  //     'x-rapidapi-host': 'shazam.p.rapidapi.com',
-  //   },
-  //   redirect: 'follow',
-  // })
-  //   .then((response) => response.text())
-  //   .then((result) => console.log(result))
-  //   .catch((error) => console.log('error', error))
+export async function fetchChartList() {
+  try {
+    const response = await fetch('https://shazam.p.rapidapi.com/charts/list', {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        'x-rapidapi-key': process.env.NEXT_PUBLIC_SHAZAM_API_KEY ?? '',
+        'x-rapidapi-host': 'shazam.p.rapidapi.com',
+      },
+    })
+    return await response.json()
+  } catch (error) {
+    console.error(error)
+  }
 }

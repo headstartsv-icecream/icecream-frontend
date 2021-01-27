@@ -21,7 +21,7 @@ function IcezamLogo() {
     <MaxWidth>
       <Link href="/">
         <a href="/">
-          <Image src="/icezam-logo.png" alt="icezam-logo" width={500} height={500} />
+          <Image src="/icezam-logo.png" alt="icezam-logo" width={100} height={100} />
         </a>
       </Link>
     </MaxWidth>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
 import Link from 'next/link'
-import { fetchChartList } from '../utils/commons'
+import { fetchChartTrack } from '../utils/commons'
 
 const List = styled.ol`
   list-style-type: none;
@@ -13,6 +13,7 @@ const ListItem = styled.li`
   display: list-item;
   font-weight: bold;
   font-size: 1rem;
+  min-width: 256px;
   border-bottom: 2px solid #d6d4d4;
   /* margin-right: -4px; */
   padding: 25px;
@@ -134,7 +135,7 @@ function RenderItems({ track, index }: Props) {
         <ListItem>
           <FlexContainerRow>
             <Rank>{index}</Rank>
-            <ThumbNail src={track.images.coverart} />
+            <ThumbNail src={track.images ? track.images.coverart : '/icezam-logo.png'} />
             <Title>
               {track.title} <br /> <SubTitle>{track.subtitle}</SubTitle>
             </Title>
@@ -149,30 +150,30 @@ function RenderItems({ track, index }: Props) {
   )
 }
 
-function MusicList() {
-  const [chartList, setChartList] = useState<any>()
+function MusicList(countryCode: Record<string, string>) {
+  const [chartTrack, setChartTrack] = useState<any>()
   useEffect(() => {
     ;(async () => {
-      const result = await fetchChartList()
-      setChartList(result)
+      const result = await fetchChartTrack(countryCode)
+      setChartTrack(result)
       console.log(
-        (result.tracks as any[]).map((track) => {
-          return track.key
+        (result?.tracks as any[])?.map((track) => {
+          return track
         })
       )
     })()
-  }, [])
+  }, [countryCode])
   return (
     <Container>
       <LeftWrapper>
         <List>
-          {(chartList?.tracks as any[])?.map((track, index) => (
+          {(chartTrack?.tracks as any[])?.map((track, index) => (
             <RenderItems key={track.key} index={index + 1} track={track} />
           ))}
         </List>
       </LeftWrapper>
       <RightWrapper>
-        <CoverArt src={chartList?.tracks[0].share.image} alt="coverart" />
+        <CoverArt src={chartTrack?.tracks[0].share.image} alt="coverart" />
       </RightWrapper>
     </Container>
   )
