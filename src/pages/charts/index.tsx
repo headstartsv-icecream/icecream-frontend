@@ -115,7 +115,7 @@ function ChartsPage() {
         <ParentContainer>
           <SelectFlex>
             <Select value={a} onChange={handleChange}>
-              {(chartList?.countries as any[]).map((country) => (
+              {(chartList?.countries as any[])?.map((country) => (
                 <Option key={country.id} value={country.id}>
                   {country.name}
                 </Option>
