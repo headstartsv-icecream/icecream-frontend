@@ -26,7 +26,7 @@ const Title = styled.span`
   padding-left: 20px;
   font-size: 1.1rem;
   color: black;
-  white-space: nowrap;
+  white-space: wrap;
   overflow: hidden;
   text-overflow: ellipsis;
   :hover {
@@ -35,7 +35,7 @@ const Title = styled.span`
 `
 const SubTitle = styled.span`
   color: gray;
-  white-space: nowrap;
+  white-space: wrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `
@@ -44,6 +44,7 @@ const Rank = styled.div`
   color: black;
   padding-right: 30px;
   font-size: 25px;
+  white-space: nowrap;
 `
 
 const FlexContainerRow = styled.div`
@@ -64,7 +65,7 @@ const ThumbNail = styled.img`
 
 const CommentChip = styled.div`
   display: inline-block;
-  /* white-space: nowrap; */
+  white-space: nowrap;
   margin-left: auto;
   padding: 0 25px;
   height: 50px;
@@ -99,9 +100,9 @@ const RightWrapper = styled.div`
   flex-direction: column;
   /* border: 2px solid blue; */
 
-  /* @media screen and (max-width: 960px) {
+  @media screen and (max-width: 960px) {
     display: none;
-  } */
+  }
 `
 
 const CoverArt = styled.img`
@@ -111,8 +112,8 @@ const CoverArt = styled.img`
   top: 100px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   :hover {
-    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
-    /* transition: all 0.3s; */
+    box-shadow: 0 0 3px 2px rgba(0, 140, 186, 0.5);
+    transition: all 0.3s;
   }
 `
 
@@ -135,7 +136,9 @@ function RenderItems({ track, index }: Props) {
         <ListItem>
           <FlexContainerRow>
             <Rank>{index}</Rank>
-            <ThumbNail src={track.images ? track.images.coverart : '/icezam-logo.png'} />
+            {track ? (
+              <ThumbNail src={track.images ? track.images.coverart : '/icezam-logo.png'} />
+            ) : null}
             <Title>
               {track.title} <br /> <SubTitle>{track.subtitle}</SubTitle>
             </Title>
@@ -173,7 +176,7 @@ function MusicList(countryCode: Record<string, string>) {
         </List>
       </LeftWrapper>
       <RightWrapper>
-        <CoverArt src={chartTrack?.tracks[0].share.image} alt="coverart" />
+        {chartTrack ? <CoverArt src={chartTrack?.tracks[0].share.image} alt="coverart" /> : null}
       </RightWrapper>
     </Container>
   )
