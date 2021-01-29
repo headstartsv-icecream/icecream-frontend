@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
 import Link from 'next/link'
 import { fetchChartTrack } from '../utils/commons'
+import InfiniteScroll from 'react-infinite-scroller'
 
 const List = styled.ol`
   list-style-type: none;
@@ -116,7 +117,6 @@ const CoverArt = styled.img`
     transition: all 0.3s;
   }
 `
-
 type Props = {
   track: {
     id: string
@@ -137,7 +137,15 @@ function RenderItems({ track, index }: Props) {
           <FlexContainerRow>
             <Rank>{index}</Rank>
             {track ? (
-              <ThumbNail src={track.images ? track.images.coverart : '/icezam-logo.png'} />
+              <ThumbNail
+                src={
+                  track.images
+                    ? track.images.coverart
+                      ? track.images.coverart
+                      : '/icezam-logo.png'
+                    : '/icezam-logo.png'
+                }
+              />
             ) : null}
             <Title>
               {track.title} <br /> <SubTitle>{track.subtitle}</SubTitle>
@@ -154,29 +162,44 @@ function RenderItems({ track, index }: Props) {
 }
 
 function MusicList(countryCode: Record<string, string>) {
-  const [chartTrack, setChartTrack] = useState<any>()
-  useEffect(() => {
+  const [startFrom, setStartFrom] = useState(0)
+  const [musicList, setMusicList] = useState<any[]>([])
+  const [hasMoreItem, setHasMoreItems] = useState(true)
+
+  function handleLoadMore() {
     ;(async () => {
-      const result = await fetchChartTrack(countryCode)
-      setChartTrack(result)
-      console.log(
-        (result?.tracks as any[])?.map((track) => {
-          return track
-        })
-      )
+      const response = await fetchChartTrack(countryCode, startFrom)
+      const page = response.tracks
+      if (startFrom < 200) {
+        setMusicList([...musicList, ...page])
+        setStartFrom((prev) => prev + 20)
+      } else {
+        setHasMoreItems(false)
+      }
     })()
-  }, [countryCode])
+  }
   return (
     <Container>
       <LeftWrapper>
-        <List>
-          {(chartTrack?.tracks as any[])?.map((track, index) => (
-            <RenderItems key={track.key} index={index + 1} track={track} />
-          ))}
-        </List>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={handleLoadMore}
+          hasMore={hasMoreItem}
+          loader={
+            <div className="loader" key={0}>
+              Loading ...
+            </div>
+          }
+        >
+          <List>
+            {musicList?.map((track, index) => (
+              <RenderItems key={track.key} index={index + 1} track={track} />
+            ))}
+          </List>
+        </InfiniteScroll>
       </LeftWrapper>
       <RightWrapper>
-        {chartTrack ? <CoverArt src={chartTrack?.tracks[0].share.image} alt="coverart" /> : null}
+        {musicList ? <CoverArt src={musicList[0]?.share.image} alt="coverart" /> : null}
       </RightWrapper>
     </Container>
   )

@@ -93,6 +93,7 @@ const Icon = styled.div`
 function ChartsPage() {
   const [a, setA] = useState('KR')
   const [chartList, setChartList] = useState<any>()
+
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setA(event.target.value)
   }

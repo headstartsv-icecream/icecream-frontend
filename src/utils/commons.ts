@@ -38,11 +38,11 @@ export function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export async function fetchChartTrack(countryCode: Record<string, string>) {
+export async function fetchChartTrack(countryCode: Record<string, string>, startFrom: number) {
   try {
     const code = countryCode.countryCode
     const response = await fetch(
-      `https://shazam.p.rapidapi.com/charts/track?locale=${code}&listId=ip-country-chart-${code}`,
+      `https://shazam.p.rapidapi.com/charts/track?locale=${code}&listId=ip-country-chart-${code}&startFrom=${startFrom}`,
       {
         method: 'GET',
         redirect: 'follow',
