@@ -56,6 +56,7 @@ export function getBlackOrWhiteTextColorFrom(backgroundColor: string) {
 
 export function formatNumber(n: number) {
   return Intl.NumberFormat('ko-KR').format(n)
+}
 
 export async function fetchChartTrack(countryCode: Record<string, string>, startFrom: number) {
   try {

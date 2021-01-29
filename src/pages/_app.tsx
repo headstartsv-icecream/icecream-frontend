@@ -11,7 +11,6 @@ import { ApolloProvider } from '@apollo/client'
 import { client } from 'src/apollo/client'
 import 'nprogress/nprogress.css'
 
-
 const GlobalStyle = createGlobalStyle`
   body {
     padding: 0;
