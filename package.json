@@ -23,13 +23,18 @@
   "dependencies": {
     "@apollo/client": "^3.3.6",
     "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
     "@react-hook/window-scroll": "^1.3.0",
+    "@types/nprogress": "^0.2.0",
+    "@types/react-infinite-scroller": "^1.2.1",
     "antd": "^4.10.2",
     "graphql": "^15.4.0",
     "next": "^10.0.4",
     "next-images": "^1.6.2",
+    "nprogress": "^0.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-infinite-scroller": "^1.2.4",
     "recordrtc": "git+https://github.com/headstartsv-icecream/RecordRTC.git",
     "sanitize.css": "^12.0.1",
     "styled-components": "^5.2.1"
