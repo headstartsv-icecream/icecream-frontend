@@ -31,7 +31,7 @@ export default class IcecreamDocument extends Document {
 
   render() {
     return (
-      <Html lang="ko">
+      <Html>
         <Head>
           <link rel="apple-touch-icon" href="/icezam-logo.png" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
