@@ -1,0 +1,38 @@
+query Music($id: ID!) {
+  music(id: $id) {
+    id
+    title
+    artists
+    searchCount
+    albumImage
+    artistImage
+    genres
+    lyrics
+    melonLink
+    shazamId
+    youtubeLink
+    youtubeImage
+    artistOtherMusics {
+      id
+      title
+    }
+    comments {
+      id
+      creationDate
+      crawlingDate
+      content
+      userName
+      source
+      likeCount
+    }
+    includedPlaylists {
+      id
+      name
+    }
+    similarMusics {
+      id
+      title
+      artists
+    }
+  }
+}
