@@ -12,7 +12,7 @@ export function getBase64EncodingFrom(binaryLargeObject: Blob) {
 }
 
 export async function fetchDetectedMusicInfo(body: string) {
-  // return { matches: ['asdf'], track: { key: 123123 } } //
+  // return { matches: ['asdf'], track: { key: 123123, title: 'Dynamite' } } //
   try {
     const response = await fetch('https://shazam.p.rapidapi.com/songs/detect', {
       method: 'POST',
@@ -52,4 +52,8 @@ export function getBlackOrWhiteTextColorFrom(backgroundColor: string) {
   } else {
     return '#222'
   }
+}
+
+export function formatNumber(n: number) {
+  return Intl.NumberFormat('ko-KR').format(n)
 }
