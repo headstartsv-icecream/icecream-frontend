@@ -33,8 +33,15 @@ export type Mutation = {
   createComment: Scalars['Boolean']
   modifyComment: Scalars['Boolean']
   deleteComment: Scalars['Boolean']
-  /** shazamId가 있으면 기존 레코드를 수정하고, shazamId가 없으면 새로 만든다. */
+  /**
+   * Shazam API로부터 받은 음악 상세 데이터를 전송하면 기존에 데이터가 있으면 수정하고 없으면 새로 만든다.
+   * 그리고 해당 음악 정보를 반환한다.
+   */
   createOrModifyMusic: Music
+  /** 이메일과 1번 해싱한 비밀번호를 전송하면 인증 토큰을 반환한다. */
+  login?: Maybe<Scalars['String']>
+  /** HTTP Header나 쿠키에 인증 토큰 정보를 넣어서 요청하면 로그아웃 성공 여부를 반환한다. */
+  logout: Scalars['Boolean']
 }
 
 export type MutationCreateCommentArgs = {
@@ -51,6 +58,11 @@ export type MutationDeleteCommentArgs = {
 
 export type MutationCreateOrModifyMusicArgs = {
   input: MusicCreationModificationInput
+}
+
+export type MutationLoginArgs = {
+  email: Scalars['String']
+  passwordHash: Scalars['String']
 }
 
 /** 음악 정보 생성-수정 시 필요한 입력값 */
@@ -83,7 +95,7 @@ export type Comment = {
   content: Scalars['String']
   userName: Scalars['String']
   source: CrawlingSource
-  like?: Maybe<Scalars['Int']>
+  likeCount?: Maybe<Scalars['Int']>
 }
 
 export type Music = {
@@ -93,6 +105,7 @@ export type Music = {
   artists: Array<Scalars['String']>
   searchCount: Scalars['Int']
   albumImage?: Maybe<Scalars['String']>
+  albumColor?: Maybe<Scalars['String']>
   artistImage?: Maybe<Scalars['String']>
   genres?: Maybe<Array<Scalars['String']>>
   lyrics?: Maybe<Array<Scalars['String']>>
@@ -103,7 +116,7 @@ export type Music = {
   /** 이 노래를 부른 가수의 다른 노래를 검색 횟수 순으로 반환한다. # 페이지네이션 필요 */
   artistOtherMusics?: Maybe<Array<Music>>
   /** 이 노래에 해당하는 댓글 목록을 반환한다. # 페이지네이션 필요 */
-  comments?: Maybe<Array<Scalars['String']>>
+  comments?: Maybe<Array<Comment>>
   /** 이 노래가 포함된 재생 목록을 반환한다. # 페이지네이션 필요 */
   includedPlaylists?: Maybe<Array<Playlist>>
   /** 이 노래와 비슷한 노래 목록을 반환한다. # 페이지네이션 필요 */
@@ -121,8 +134,12 @@ export type User = {
   __typename?: 'User'
   id: Scalars['ID']
   creationDate: Scalars['DateTime']
+  email: Scalars['String']
+  token: Scalars['String']
   name: Scalars['String']
   age: Scalars['Int']
+  playlist?: Maybe<Array<Playlist>>
+  likedMusic?: Maybe<Array<Music>>
 }
 
 export type Query = {
@@ -159,7 +176,7 @@ export type CreateOrModifyMusicMutationVariables = Exact<{
 }>
 
 export type CreateOrModifyMusicMutation = { __typename?: 'Mutation' } & {
-  createOrModifyMusic: { __typename?: 'Music' } & Pick<Music, 'id' | 'title'>
+  createOrModifyMusic: { __typename?: 'Music' } & Pick<Music, 'id' | 'title' | 'albumColor'>
 }
 
 export type MusicQueryVariables = Exact<{
@@ -167,7 +184,45 @@ export type MusicQueryVariables = Exact<{
 }>
 
 export type MusicQuery = { __typename?: 'Query' } & {
-  music?: Maybe<{ __typename?: 'Music' } & Pick<Music, 'id'>>
+  music?: Maybe<
+    { __typename?: 'Music' } & Pick<
+      Music,
+      | 'id'
+      | 'title'
+      | 'artists'
+      | 'searchCount'
+      | 'albumImage'
+      | 'artistImage'
+      | 'genres'
+      | 'lyrics'
+      | 'melonLink'
+      | 'shazamId'
+      | 'youtubeLink'
+      | 'youtubeImage'
+    > & {
+        artistOtherMusics?: Maybe<Array<{ __typename?: 'Music' } & Pick<Music, 'id' | 'title'>>>
+        comments?: Maybe<
+          Array<
+            { __typename?: 'Comment' } & Pick<
+              Comment,
+              | 'id'
+              | 'creationDate'
+              | 'crawlingDate'
+              | 'content'
+              | 'userName'
+              | 'source'
+              | 'likeCount'
+            >
+          >
+        >
+        includedPlaylists?: Maybe<
+          Array<{ __typename?: 'Playlist' } & Pick<Playlist, 'id' | 'name'>>
+        >
+        similarMusics?: Maybe<
+          Array<{ __typename?: 'Music' } & Pick<Music, 'id' | 'title' | 'artists'>>
+        >
+      }
+  >
 }
 
 export type MusicByTitleArtistQueryVariables = Exact<{
@@ -184,6 +239,7 @@ export const CreateOrModifyMusicDocument = gql`
     createOrModifyMusic(input: $input) {
       id
       title
+      albumColor
     }
   }
 `
@@ -232,6 +288,39 @@ export const MusicDocument = gql`
   query Music($id: ID!) {
     music(id: $id) {
       id
+      title
+      artists
+      searchCount
+      albumImage
+      artistImage
+      genres
+      lyrics
+      melonLink
+      shazamId
+      youtubeLink
+      youtubeImage
+      artistOtherMusics {
+        id
+        title
+      }
+      comments {
+        id
+        creationDate
+        crawlingDate
+        content
+        userName
+        source
+        likeCount
+      }
+      includedPlaylists {
+        id
+        name
+      }
+      similarMusics {
+        id
+        title
+        artists
+      }
     }
   }
 `
