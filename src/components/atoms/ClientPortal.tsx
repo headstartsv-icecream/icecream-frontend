@@ -3,21 +3,21 @@ import { createPortal } from 'react-dom'
 
 type Props = {
   children: ReactNode
-  isOpen: boolean
-  onClose: () => void
+  isOpen?: boolean
+  onClose?: () => void
 }
 
 function ClientPortal({ children, isOpen, onClose }: Props) {
   const [containerElement, setContainerElement] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
-    setContainerElement(document.getElementById('__next'))
+    setContainerElement(document.getElementById('__next') ?? document.getElementById('root'))
   }, [])
 
   useEffect(() => {
     function closeDrawerWhenEscapeKeyPressed(e: KeyboardEvent) {
       if (e.key === 'Escape') {
-        if (isOpen) {
+        if (isOpen && onClose) {
           onClose()
         }
       }

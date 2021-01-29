@@ -17,7 +17,7 @@ const FixedPosition = styled.div<{ isDrawerOpen: boolean }>`
   overflow-y: auto;
   background-color: #222;
 
-  ${(p) => (p.isDrawerOpen ? 'transform: translate(0, 0);' : 'transform: translate(101%, 0);')}
+  ${(p) => (p.isDrawerOpen ? 'transform: translate(0, 0);' : 'transform: translate(100%, 0);')}
   transition: transform 0.3s cubic-bezier(0.4, 0.2, 0, 1);
 
   a,
@@ -51,7 +51,7 @@ const FlexContainerColumn = styled.ul`
   list-style-type: none;
 `
 
-type Props = {
+export type Props = {
   isOpen: boolean
   onClose: () => void
 }

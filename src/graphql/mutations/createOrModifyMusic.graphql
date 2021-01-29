@@ -1,0 +1,7 @@
+mutation CreateOrModifyMusic($input: MusicCreationModificationInput!) {
+  createOrModifyMusic(input: $input) {
+    id
+    title
+    albumColor
+  }
+}

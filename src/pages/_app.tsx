@@ -7,7 +7,10 @@ import { pageview } from 'src/utils/google-analytics'
 import { createGlobalStyle } from 'styled-components'
 import 'sanitize.css'
 import 'antd/dist/antd.css'
+import { ApolloProvider } from '@apollo/client'
+import { client } from 'src/apollo/client'
 import 'nprogress/nprogress.css'
+
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -57,7 +60,9 @@ function IcecreamApp({ Component, pageProps }: AppProps) {
       </Head>
       <GlobalStyle />
       <TopProgressBar />
-      <Component {...pageProps} />
+      <ApolloProvider client={client}>
+        <Component {...pageProps} />
+      </ApolloProvider>
     </>
   )
 }

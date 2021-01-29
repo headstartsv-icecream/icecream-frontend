@@ -7,7 +7,7 @@ const StyledHeader = styled.header`
   height: ${HEADER_HEIGHT};
 
   background-color: rgba(255, 255, 255, 0.055);
-  backdrop-filter: blur(10px);
+  //backdrop-filter: blur(10px);
 
   position: fixed;
   top: 0;

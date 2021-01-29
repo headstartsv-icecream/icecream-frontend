@@ -1,7 +1,0 @@
-query CById {
-  cById(cId: 1) {
-    id
-    name
-    age
-  }
-}
