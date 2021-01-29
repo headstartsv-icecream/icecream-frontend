@@ -14,7 +14,7 @@ const PaddingTop = styled.div`
 const ParentContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 3fr 1fr;
+  grid-template-rows: 1fr 1fr 3fr 1fr;
   padding-left: 2%;
   height: 60vh;
   background: linear-gradient(to bottom, #0bf, #ecd5ec);
@@ -29,7 +29,6 @@ const MainGrid = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 10px;
-  /* border: 1px solid black; */
 `
 
 const Select = styled.select`
@@ -43,14 +42,11 @@ const Select = styled.select`
   line-height: 1.5;
   color: #fff;
   background-color: #baa6f8;
-  /* background: url('/arrow-down-sign-to-navigate.svg') no-repeat 95% 50%; */
 
   padding: 0.6em 1.4em 0.5em 2em;
   margin: 0;
   width: 200px;
-  /* border: 1px solid #a650f7; */
   border-radius: 0.5em;
-  /* box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04); */
 `
 
 const Option = styled.option`
@@ -62,7 +58,6 @@ const TitleFlex = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  /* border: 1px solid black; */
 `
 
 const FirstTitle = styled.div`
@@ -71,15 +66,12 @@ const FirstTitle = styled.div`
   color: #ffffff;
   font-weight: bold;
   font-size: 1.5rem;
-
-  /* border: 1px solid blue; */
 `
 const SecondTitle = styled.div`
   display: flex;
   color: #ffffff;
   font-weight: bold;
   font-size: 2.5rem;
-  /* border: 1px solid red; */
   align-self: baseline;
 `
 
@@ -88,14 +80,13 @@ const Icon = styled.div`
   padding-top: 15px;
   flex-direction: column;
   justify-content: center;
-  /* border: 1px solid yellow; */
 `
 function ChartsPage() {
-  const [a, setA] = useState('KR')
+  const [countryCode, setCountryCode] = useState('KR')
   const [chartList, setChartList] = useState<any>()
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setA(event.target.value)
+    setCountryCode(event.target.value)
   }
 
   const handleDelete = () => {
@@ -112,10 +103,10 @@ function ChartsPage() {
   return (
     <PageTitle title="Icecream Music - Charts">
       <PageLayout>
-        <PaddingTop />
         <ParentContainer>
+          <PaddingTop />
           <SelectFlex>
-            <Select value={a} onChange={handleChange}>
+            <Select value={countryCode} onChange={handleChange}>
               {(chartList?.countries as any[])?.map((country) => (
                 <Option key={country.id} value={country.id}>
                   {country.name}
@@ -128,13 +119,13 @@ function ChartsPage() {
               <Image src="/play-circle-regular.svg" alt="play-button" width={80} height={80} />
             </Icon>
             <TitleFlex>
-              <FirstTitle>{a}</FirstTitle>
+              <FirstTitle>{countryCode}</FirstTitle>
               <SecondTitle>Top 200</SecondTitle>
-              <FirstTitle>이번 주에 {a}에서 가장 많이 icezam된 트랙</FirstTitle>
+              <FirstTitle>이번 주에 {countryCode}에서 가장 많이 icezam된 트랙</FirstTitle>
             </TitleFlex>
           </MainGrid>
         </ParentContainer>
-        <MusicList countryCode={a} />
+        <MusicList countryCode={countryCode} />
       </PageLayout>
     </PageTitle>
   )

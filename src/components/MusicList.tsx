@@ -199,7 +199,7 @@ function MusicList(countryCode: Record<string, string>) {
         </InfiniteScroll>
       </LeftWrapper>
       <RightWrapper>
-        {musicList ? <CoverArt src={musicList[0]?.share.image} alt="coverart" /> : null}
+        {startFrom > 0 ? <CoverArt src={musicList[0]?.share.image} alt="coverart" /> : null}
       </RightWrapper>
     </Container>
   )
