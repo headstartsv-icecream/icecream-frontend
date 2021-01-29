@@ -4,8 +4,8 @@ import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import MusicNameOverlay from 'src/components/MusicNameOverlay'
 import { useMusicQuery } from 'src/graphql/generated/types-and-hooks'
-import { HEADER_HEIGHT, imgUrl, MOBILE_MIN_WIDTH } from 'src/models/constants'
-import { getBlackOrWhiteTextColorFrom } from 'src/utils/commons'
+import { HEADER_HEIGHT, MOBILE_MIN_WIDTH } from 'src/models/constants'
+import { formatNumber, getBlackOrWhiteTextColorFrom } from 'src/utils/commons'
 import styled from 'styled-components'
 
 const FlexContainer = styled.div<{ backgroundColor: string }>`
@@ -32,30 +32,85 @@ const StyledImage = styled.img`
 
 const MusicInformation = styled.div``
 
+const dummy = {
+  id: '0',
+  title: 'Nonstop',
+  artists: [
+    { id: '1', name: 'OH MY GIRL' },
+    { id: '2', name: '오마이걸' },
+  ],
+  searchCount: 1123124,
+  albumImage: 'https://images.shazam.com/coverart/t525216235-b1508988683_s800.jpg',
+  artistImage:
+    'https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/e8/dd/f1/e8ddf19a-a284-74b2-dd8d-5a26017363b3/mzl.xfkduycl.jpg/800x800bb.jpeg',
+  genres: ['K-POP'],
+  lyrics: ['asf', 'sadf'],
+  melonLink: 'https://www.melon.com/video/detail2.htm?mvId=50219624&menuId=28010101',
+  shazamId: '123',
+  youtubeLink:
+    'https://www.youtube.com/watch?v=iDjQSdN_ig8&ab_channel=1theK%28%EC%9B%90%EB%8D%94%EC%BC%80%EC%9D%B4%29',
+  youtubeImage: '',
+  artistOtherMusics: [
+    {
+      id: '0',
+      title: 'ON',
+    },
+  ],
+  comments: [
+    {
+      id: '1',
+      creationDate: Date.now(),
+      crawlingDate: Date.now(),
+      content: '댓글 내용',
+      userName: '댓글 쓴 사용자 이름',
+      source: 'YOUTUBE',
+      likeCount: 1,
+    },
+  ],
+  includedPlaylists: [
+    {
+      id: '1',
+      name: 'name',
+    },
+  ],
+  similarMusics: [
+    {
+      id: '1',
+      title: '노래 제목',
+      artists: '가수 이름',
+    },
+  ],
+}
+
 function MusicDetailPage() {
   const router = useRouter()
   const { id, title } = router.query
 
   const { data, error, loading } = useMusicQuery({ variables: { id: id as string } })
 
-  const backgroundColor = '#c8bebb'
-
   return (
     <PageTitle title="Icezam - My Page">
       <PageLayout>
-        <MusicNameOverlay backgroundColor={backgroundColor} musicName={title as string} />
-        <FlexContainer backgroundColor={backgroundColor}>
-          <StyledImage src={imgUrl} alt="music cover" />
+        <MusicNameOverlay backgroundColor={'#c8bebb'} musicName={title as string} />
+        <FlexContainer backgroundColor={'#c8bebb'}>
+          <StyledImage src={dummy.albumImage} alt="music cover" />
 
           <MusicInformation>
-            <div>맑은 하늘</div>
-            <Link href="/artists/12">
-              <a href="/artists/12">陳致逸 & HOYO-MiX</a>
-            </Link>
-            ``
-            <div>OST</div>
-            <div>Icezam 268회</div>
-            <div>음악 상세 페이지 ID: {id}</div>
+            <h1>{dummy.title}</h1>
+            <>
+              {dummy.artists.map((artist) => (
+                <Link key={artist.id} href={`/artists/${artist.id}`}>
+                  <a href={`/artists/${artist.id}`}>{artist.name}</a>
+                </Link>
+              ))}
+            </>
+
+            <div>
+              {dummy.genres.map((genre) => (
+                <div key={genre}>{genre}</div>
+              ))}
+            </div>
+            <div>Icezam {formatNumber(dummy.searchCount)}회</div>
           </MusicInformation>
         </FlexContainer>
       </PageLayout>
