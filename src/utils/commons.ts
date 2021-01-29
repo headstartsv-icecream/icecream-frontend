@@ -56,4 +56,39 @@ export function getBlackOrWhiteTextColorFrom(backgroundColor: string) {
 
 export function formatNumber(n: number) {
   return Intl.NumberFormat('ko-KR').format(n)
+
+export async function fetchChartTrack(countryCode: Record<string, string>, startFrom: number) {
+  try {
+    const code = countryCode.countryCode
+    const response = await fetch(
+      `https://shazam.p.rapidapi.com/charts/track?locale=${code}&listId=ip-country-chart-${code}&startFrom=${startFrom}`,
+      {
+        method: 'GET',
+        redirect: 'follow',
+        headers: {
+          'x-rapidapi-key': process.env.NEXT_PUBLIC_SHAZAM_API_KEY ?? '',
+          'x-rapidapi-host': 'shazam.p.rapidapi.com',
+        },
+      }
+    )
+    return await response.json()
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function fetchChartList() {
+  try {
+    const response = await fetch('https://shazam.p.rapidapi.com/charts/list', {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        'x-rapidapi-key': process.env.NEXT_PUBLIC_SHAZAM_API_KEY ?? '',
+        'x-rapidapi-host': 'shazam.p.rapidapi.com',
+      },
+    })
+    return await response.json()
+  } catch (error) {
+    console.error(error)
+  }
 }
