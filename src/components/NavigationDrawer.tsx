@@ -70,13 +70,13 @@ function NavigationDrawer({ isOpen, onClose }: Props) {
         </FlexContainerBetween>
         <FlexContainerColumn>
           <li>
-            <Link href="myicezam">
-              <a href="myicezam">내 라이브러리</a>
+            <Link href="/myicezam">
+              <a href="/myicezam">내 라이브러리</a>
             </Link>
           </li>
           <li>
-            <Link href="charts">
-              <a href="charts">차트</a>
+            <Link href="/charts">
+              <a href="/charts">차트</a>
             </Link>
           </li>
         </FlexContainerColumn>
