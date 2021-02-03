@@ -58,9 +58,9 @@ export function formatNumber(n: number) {
   return Intl.NumberFormat('ko-KR').format(n)
 }
 
-export async function fetchChartTrack(countryCode: Record<string, string>, startFrom: number) {
+export async function fetchChartTrack(countryCode: string, startFrom: number) {
   try {
-    const code = countryCode.countryCode
+    const code = countryCode
     const response = await fetch(
       `https://shazam.p.rapidapi.com/charts/track?locale=${code}&listId=ip-country-chart-${code}&startFrom=${startFrom}`,
       {
