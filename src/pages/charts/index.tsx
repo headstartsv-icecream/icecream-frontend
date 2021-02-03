@@ -249,20 +249,18 @@ function ChartsPage() {
   const [musicList, setMusicList] = useState<any[]>([])
   const [hasMoreItem, setHasMoreItems] = useState(true)
 
-  function handleLoadMore() {
-    ;(async () => {
-      const response = await fetchChartTrack(countryCode, startFrom)
-      const page = response.tracks
-      if (startFrom < 200) {
-        setMusicList([...musicList, ...page])
-        setStartFrom((prev) => prev + 20)
-      } else {
-        setHasMoreItems(false)
-      }
-    })()
+  async function handleLoadMore() {
+    const response = await fetchChartTrack(countryCode, startFrom)
+    const page = response.tracks
+    if (startFrom < 200) {
+      setMusicList([...musicList, ...page])
+      setStartFrom((prev) => prev + 20)
+    } else {
+      setHasMoreItems(false)
+    }
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     setCountryCode(event.target.value)
     setStartFrom(0)
     setMusicList([])
