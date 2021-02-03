@@ -1,14 +1,16 @@
-import styled from 'styled-components'
-import TopProgressBar from 'src/components/TopProgressBar'
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { fetchChartList, fetchChartTrack } from '../../utils/commons'
+import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import InfiniteScroll from 'react-infinite-scroller'
+import styled from 'styled-components'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import { HEADER_HEIGHT } from 'src/models/constants'
-import InfiniteScroll from 'react-infinite-scroller'
-import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
+import { fetchChartList, fetchChartTrack } from '../../utils/commons'
+
+const TopProgressBar = dynamic(() => import('src/components/TopProgressBar'), { ssr: false })
 
 const ParentContainer = styled.div`
   display: grid;
