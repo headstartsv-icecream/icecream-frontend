@@ -58,14 +58,13 @@ export function formatNumber(n: number) {
   return Intl.NumberFormat('ko-KR').format(n)
 }
 
-export async function fetchChartTrack(countryCode: string, startFrom: number) {
+export async function fetchChartTrackList(countryCode: string, startFrom: number) {
   try {
     const code = countryCode
     const response = await fetch(
       `https://shazam.p.rapidapi.com/charts/track?locale=${code}&listId=ip-country-chart-${code}&startFrom=${startFrom}`,
       {
         method: 'GET',
-        redirect: 'follow',
         headers: {
           'x-rapidapi-key': process.env.NEXT_PUBLIC_SHAZAM_API_KEY ?? '',
           'x-rapidapi-host': 'shazam.p.rapidapi.com',
@@ -78,11 +77,10 @@ export async function fetchChartTrack(countryCode: string, startFrom: number) {
   }
 }
 
-export async function fetchChartList() {
+export async function fetchChartCountryList() {
   try {
     const response = await fetch('https://shazam.p.rapidapi.com/charts/list', {
       method: 'GET',
-      redirect: 'follow',
       headers: {
         'x-rapidapi-key': process.env.NEXT_PUBLIC_SHAZAM_API_KEY ?? '',
         'x-rapidapi-host': 'shazam.p.rapidapi.com',

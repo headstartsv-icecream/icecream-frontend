@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import { HEADER_HEIGHT } from 'src/models/constants'
-import { fetchChartList, fetchChartTrack } from '../../utils/commons'
+import { fetchChartCountryList, fetchChartTrackList } from '../../utils/commons'
 
 const TopProgressBar = dynamic(() => import('src/components/TopProgressBar'), { ssr: false })
 
@@ -239,17 +239,24 @@ function RenderItems({ track, index }: Props) {
   )
 }
 
-function ChartsPage() {
-  const [countryCode, setCountryCode] = useState('KR')
-  const [chartList, setChartList] = useState<any>()
+type ChartsPageProps = {
+  chartCountryList: {
+    countries: {
+      id: number
+      name: string
+    }[]
+  }
+}
 
+function ChartsPage({ chartCountryList }: ChartsPageProps) {
+  const [countryCode, setCountryCode] = useState('KR')
   const [startFrom, setStartFrom] = useState(0)
   const [musicList, setMusicList] = useState<any[]>([])
   const [hasMoreItem, setHasMoreItems] = useState(true)
 
   function handleLoadMore() {
     ;(async () => {
-      const response = await fetchChartTrack(countryCode, startFrom)
+      const response = await fetchChartTrackList(countryCode, startFrom)
       const page = response.tracks
       if (startFrom < 200) {
         setMusicList([...musicList, ...page])
@@ -270,13 +277,6 @@ function ChartsPage() {
     console.info('You clicked the delete icon.')
   }
 
-  useEffect(() => {
-    ;(async () => {
-      const result = await fetchChartList()
-      setChartList(result)
-    })()
-  }, [])
-
   return (
     <PageTitle title="Icecream Music - Charts">
       <PageLayout>
@@ -284,7 +284,7 @@ function ChartsPage() {
         <ParentContainer>
           <SelectFlex>
             <Select value={countryCode} onChange={handleChange}>
-              {(chartList?.countries as any[])?.map((country) => (
+              {chartCountryList.countries.map((country) => (
                 <Option key={country.id} value={country.id}>
                   {country.name}
                 </Option>
@@ -328,6 +328,16 @@ function ChartsPage() {
       </PageLayout>
     </PageTitle>
   )
+}
+
+export async function getStaticProps() {
+  const chartCountryList = await fetchChartCountryList()
+
+  return {
+    props: {
+      chartCountryList,
+    },
+  }
 }
 
 export default ChartsPage
