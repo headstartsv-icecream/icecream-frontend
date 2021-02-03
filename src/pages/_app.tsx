@@ -1,14 +1,17 @@
+import { ApolloProvider } from '@apollo/client'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { client } from 'src/apollo/client'
 import { pageview } from 'src/utils/google-analytics'
 import { createGlobalStyle } from 'styled-components'
 import 'sanitize.css'
 import 'antd/dist/antd.css'
-import { ApolloProvider } from '@apollo/client'
-import { client } from 'src/apollo/client'
 import '../styles/nprogress.css'
+
+const TopProgressBar = dynamic(() => import('src/components/TopProgressBar'), { ssr: false })
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -50,6 +53,7 @@ function IcecreamApp({ Component, pageProps }: AppProps) {
         />
       </Head>
       <GlobalStyle />
+      <TopProgressBar />
       <ApolloProvider client={client}>
         <Component {...pageProps} />
       </ApolloProvider>
