@@ -198,6 +198,26 @@ const CoverArt = styled.img`
     transition: all 0.3s;
   }
 `
+
+const FlexSkeletonRow = styled.div`
+  padding-left: 8%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+`
+const GridSkeleton = styled.div`
+  display: grid;
+  padding-left: 5%;
+  width: 100%;
+  grid-template-rows: 1fr 1fr;
+  justify-content: stretch;
+`
+
+const GridSkeletonItem = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
 type Props = {
   track: {
     id: string
@@ -311,9 +331,17 @@ function ChartsPage() {
               hasMore={hasMoreItem}
               loader={
                 <div className="loader" key={0}>
-                  <Skeleton variant="text" />
-                  <Skeleton variant="circle" width={40} height={40} />
-                  <Skeleton variant="rect" width={210} height={118} />
+                  <FlexSkeletonRow>
+                    <Skeleton variant="rect" width={90} height={90} />
+                    <GridSkeleton>
+                      <GridSkeletonItem>
+                        <Skeleton width="80%" />
+                      </GridSkeletonItem>
+                      <GridSkeletonItem>
+                        <Skeleton width="50%" />
+                      </GridSkeletonItem>
+                    </GridSkeleton>
+                  </FlexSkeletonRow>
                 </div>
               }
             >
@@ -328,7 +356,7 @@ function ChartsPage() {
             {startFrom > 0 ? (
               <CoverArt src={musicList[0]?.share.image} alt="coverart" />
             ) : (
-              <Skeleton variant="rect" width="80%" />
+              <Skeleton variant="rect" width="80%" height="100%" />
             )}
           </RightWrapper>
         </Container>
