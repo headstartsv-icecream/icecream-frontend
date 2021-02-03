@@ -10,6 +10,7 @@ import { HEADER_HEIGHT } from 'src/models/constants'
 
 import InfiniteScroll from 'react-infinite-scroller'
 import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
+import Skeleton from '@material-ui/lab/Skeleton'
 
 const PaddingTop = styled.div`
   padding-top: ${HEADER_HEIGHT};
@@ -310,7 +311,9 @@ function ChartsPage() {
               hasMore={hasMoreItem}
               loader={
                 <div className="loader" key={0}>
-                  Loading ...
+                  <Skeleton variant="text" />
+                  <Skeleton variant="circle" width={40} height={40} />
+                  <Skeleton variant="rect" width={210} height={118} />
                 </div>
               }
             >
@@ -322,7 +325,11 @@ function ChartsPage() {
             </InfiniteScroll>
           </LeftWrapper>
           <RightWrapper>
-            {startFrom > 0 ? <CoverArt src={musicList[0]?.share.image} alt="coverart" /> : null}
+            {startFrom > 0 ? (
+              <CoverArt src={musicList[0]?.share.image} alt="coverart" />
+            ) : (
+              <Skeleton variant="rect" width="80%" />
+            )}
           </RightWrapper>
         </Container>
       </PageLayout>
