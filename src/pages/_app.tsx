@@ -1,6 +1,5 @@
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 import Head from 'next/head'
-import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { pageview } from 'src/utils/google-analytics'
@@ -9,7 +8,7 @@ import 'sanitize.css'
 import 'antd/dist/antd.css'
 import { ApolloProvider } from '@apollo/client'
 import { client } from 'src/apollo/client'
-import 'nprogress/nprogress.css'
+import '../styles/nprogress.css'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -17,13 +16,6 @@ const GlobalStyle = createGlobalStyle`
     font-size: 16px;
   }
 `
-
-const TopProgressBar = dynamic(
-  () => {
-    return import('src/components/TopProgressBar')
-  },
-  { ssr: false }
-)
 
 // 최대 120자
 const description = '지금 들리는 음악을 Icezam에서 검색하고 다양한 사람들의 반응을 알아보세요.'
@@ -58,7 +50,6 @@ function IcecreamApp({ Component, pageProps }: AppProps) {
         />
       </Head>
       <GlobalStyle />
-      <TopProgressBar />
       <ApolloProvider client={client}>
         <Component {...pageProps} />
       </ApolloProvider>

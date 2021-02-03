@@ -1,21 +1,18 @@
 import styled from 'styled-components'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import { fetchChartList } from '../../utils/commons'
-
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import { HEADER_HEIGHT } from 'src/models/constants'
 import MusicList from '../../components/MusicList'
 import Image from 'next/image'
+import TopProgressBar from 'src/components/TopProgressBar'
 
-const PaddingTop = styled.div`
-  padding-top: ${HEADER_HEIGHT};
-`
 const ParentContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 3fr 1fr;
-  padding-left: 2%;
+  padding: ${HEADER_HEIGHT} 0 0 2%;
   height: 60vh;
   background: linear-gradient(to bottom, #0bf, #ecd5ec);
 `
@@ -85,12 +82,8 @@ function ChartsPage() {
   const [countryCode, setCountryCode] = useState('KR')
   const [chartList, setChartList] = useState<any>()
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCountryCode(event.target.value)
-  }
-
-  const handleDelete = () => {
-    console.info('You clicked the delete icon.')
+  function handleChange(e: ChangeEvent<HTMLSelectElement>) {
+    setCountryCode(e.target.value)
   }
 
   useEffect(() => {
@@ -103,8 +96,8 @@ function ChartsPage() {
   return (
     <PageTitle title="Icecream Music - Charts">
       <PageLayout>
+        <TopProgressBar />
         <ParentContainer>
-          <PaddingTop />
           <SelectFlex>
             <Select value={countryCode} onChange={handleChange}>
               {(chartList?.countries as any[])?.map((country) => (
