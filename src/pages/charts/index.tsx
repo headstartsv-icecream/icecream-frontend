@@ -1,4 +1,5 @@
 import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
+import Skeleton from '@material-ui/lab/Skeleton'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -254,20 +255,17 @@ function ChartsPage({ chartCountryList }: ChartsPageProps) {
   const [musicList, setMusicList] = useState<any[]>([])
   const [hasMoreItem, setHasMoreItems] = useState(true)
 
-  function handleLoadMore() {
-    ;(async () => {
-      const response = await fetchChartTrackList(countryCode, startFrom)
-      const page = response.tracks
-      if (startFrom < 200) {
-        setMusicList([...musicList, ...page])
-        setStartFrom((prev) => prev + 20)
-      } else {
-        setHasMoreItems(false)
-      }
-    })()
+  async function handleLoadMore() {
+    const response = await fetchChartTrackList(countryCode, startFrom)
+    if (startFrom < 200) {
+      setMusicList([...musicList, ...response.tracks])
+      setStartFrom((prev) => prev + 20)
+    } else {
+      setHasMoreItems(false)
+    }
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     setCountryCode(event.target.value)
     setStartFrom(0)
     setMusicList([])
@@ -310,7 +308,9 @@ function ChartsPage({ chartCountryList }: ChartsPageProps) {
               hasMore={hasMoreItem}
               loader={
                 <div className="loader" key={0}>
-                  Loading ...
+                  <Skeleton variant="text" />
+                  <Skeleton variant="circle" width={40} height={40} />
+                  <Skeleton variant="rect" width={210} height={118} />
                 </div>
               }
             >
@@ -322,7 +322,11 @@ function ChartsPage({ chartCountryList }: ChartsPageProps) {
             </InfiniteScroll>
           </LeftWrapper>
           <RightWrapper>
-            {startFrom > 0 ? <CoverArt src={musicList[0]?.share.image} alt="coverart" /> : null}
+            {startFrom > 0 ? (
+              <CoverArt src={musicList[0]?.share.image} alt="coverart" />
+            ) : (
+              <Skeleton variant="rect" width="80%" />
+            )}
           </RightWrapper>
         </Container>
       </PageLayout>
