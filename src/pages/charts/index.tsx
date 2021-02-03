@@ -326,7 +326,6 @@ function ChartsPage() {
         <Container>
           <LeftWrapper>
             <InfiniteScroll
-              pageStart={0}
               loadMore={handleLoadMore}
               hasMore={hasMoreItem}
               loader={
