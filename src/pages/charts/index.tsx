@@ -1,31 +1,33 @@
+import Skeleton from '@material-ui/lab/Skeleton'
+import Image from 'next/image'
+import { useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
-import { useState, useEffect } from 'react'
-import { fetchChartList } from '../../utils/commons'
-
+import ChartMusicList from 'src/components/ChartMusicList'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import { HEADER_HEIGHT } from 'src/models/constants'
-import MusicList from '../../components/MusicList'
-import Image from 'next/image'
+import { fetchChartCountryList, fetchChartTrackList } from '../../utils/commons'
 
-const PaddingTop = styled.div`
-  padding-top: ${HEADER_HEIGHT};
-`
-const ParentContainer = styled.div`
+const GridContainerTop = styled.div`
+  height: 60vh;
+  padding: ${HEADER_HEIGHT} 0 0 2%;
+  background: linear-gradient(to bottom, #0bf, #ecd5ec);
+
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 3fr 1fr;
-  padding-left: 2%;
-  height: 60vh;
-  background: linear-gradient(to bottom, #0bf, #ecd5ec);
 `
+
 const SelectFlex = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   padding-top: 15px;
 `
+
 const MainGrid = styled.div`
+  margin: 1rem;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 10px;
@@ -67,6 +69,7 @@ const FirstTitle = styled.div`
   font-weight: bold;
   font-size: 1.5rem;
 `
+
 const SecondTitle = styled.div`
   display: flex;
   color: #ffffff;
@@ -81,33 +84,119 @@ const Icon = styled.div`
   flex-direction: column;
   justify-content: center;
 `
-function ChartsPage() {
+
+const GridContainerMusicList = styled.div`
+  display: grid;
+  grid-template-columns: 0.55fr minmax(0, 0.45fr);
+  @media screen and (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+  grid-gap: 30px;
+`
+
+const FlexContainerLeft = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+`
+
+const FlexContainerRight = styled.div`
+  padding-top: 10%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+
+  @media screen and (max-width: 960px) {
+    display: none;
+  }
+`
+
+const CoverArt = styled.img`
+  border-radius: 8px;
+  width: 60%;
+  position: sticky;
+  top: 100px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  :hover {
+    box-shadow: 0 0 3px 2px rgba(0, 140, 186, 0.5);
+    transition: all 0.3s;
+  }
+`
+
+
+const Padding = styled.div`
+  padding: ${HEADER_HEIGHT} 0 0 0;
+  background: linear-gradient(to bottom, #0bf, #ecd5ec);
+`
+
+const FlexSkeletonRow = styled.div`
+  padding-left: 8%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+`
+const GridSkeleton = styled.div`
+  display: grid;
+  padding-left: 5%;
+  width: 100%;
+  grid-template-rows: 1fr 1fr;
+  justify-content: stretch;
+`
+
+const GridSkeletonItem = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+type Props = {
+  chartCountryList: {
+    countries: {
+      id: number
+      name: string
+    }[]
+    message: string
+  }
+}
+
+function ChartsPage({ chartCountryList }: Props) {
   const [countryCode, setCountryCode] = useState('KR')
-  const [chartList, setChartList] = useState<any>()
+  const [startFrom, setStartFrom] = useState(0)
+  const [musicList, setMusicList] = useState<any[]>([])
+  const [hasMoreItem, setHasMoreItems] = useState(true)
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  async function handleLoadMore() {
+    const response = await fetchChartTrackList(countryCode, startFrom)
+    if (startFrom < 200) {
+      setMusicList([...musicList, ...response.tracks])
+      setStartFrom((prev) => prev + 20)
+    } else {
+      setHasMoreItems(false)
+    }
+  }
+
+  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     setCountryCode(event.target.value)
+    setStartFrom(0)
+    setMusicList([])
   }
 
-  const handleDelete = () => {
-    console.info('You clicked the delete icon.')
+  if (!chartCountryList.countries) {
+    return (
+      <PageTitle title="Icecream Music - Error">
+        <PageLayout>
+          <Padding>{chartCountryList.message}</Padding>
+        </PageLayout>
+      </PageTitle>
+    )
   }
-
-  useEffect(() => {
-    ;(async () => {
-      const result = await fetchChartList()
-      setChartList(result)
-    })()
-  }, [])
 
   return (
     <PageTitle title="Icecream Music - Charts">
       <PageLayout>
-        <ParentContainer>
-          <PaddingTop />
+        <GridContainerTop>
           <SelectFlex>
             <Select value={countryCode} onChange={handleChange}>
-              {(chartList?.countries as any[])?.map((country) => (
+              {chartCountryList.countries.map((country) => (
                 <Option key={country.id} value={country.id}>
                   {country.name}
                 </Option>
@@ -124,11 +213,52 @@ function ChartsPage() {
               <FirstTitle>이번 주에 {countryCode}에서 가장 많이 icezam된 트랙</FirstTitle>
             </TitleFlex>
           </MainGrid>
-        </ParentContainer>
-        <MusicList countryCode={countryCode} />
+        </GridContainerTop>
+        <GridContainerMusicList>
+          <FlexContainerLeft>
+            <InfiniteScroll
+              loadMore={handleLoadMore}
+              hasMore={hasMoreItem}
+              loader={
+                <div className="loader" key={0}>
+                  <FlexSkeletonRow>
+                    <Skeleton variant="rect" width={90} height={90} />
+                    <GridSkeleton>
+                      <GridSkeletonItem>
+                        <Skeleton width="80%" />
+                      </GridSkeletonItem>
+                      <GridSkeletonItem>
+                        <Skeleton width="50%" />
+                      </GridSkeletonItem>
+                    </GridSkeleton>
+                  </FlexSkeletonRow>
+                </div>
+              }
+            >
+              <ChartMusicList musicList={musicList} />
+            </InfiniteScroll>
+          </FlexContainerLeft>
+          <FlexContainerRight>
+            {startFrom > 0 ? (
+              <CoverArt src={musicList[0]?.share.image} alt="coverart" />
+            ) : (
+              <Skeleton variant="rect" width="80%" height="100%" />
+            )}
+          </FlexContainerRight>
+        </GridContainerMusicList>
       </PageLayout>
     </PageTitle>
   )
+}
+
+export async function getStaticProps() {
+  const chartCountryList = await fetchChartCountryList()
+
+  return {
+    props: {
+      chartCountryList,
+    },
+  }
 }
 
 export default ChartsPage
