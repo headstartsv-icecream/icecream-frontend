@@ -123,7 +123,6 @@ const CoverArt = styled.img`
   }
 `
 
-
 const Padding = styled.div`
   padding: ${HEADER_HEIGHT} 0 0 0;
   background: linear-gradient(to bottom, #0bf, #ecd5ec);
