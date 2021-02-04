@@ -1,11 +1,9 @@
 import { useReactiveVar } from '@apollo/client'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { musicsVar } from 'src/apollo/cache'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import MusicNameOverlay from 'src/components/MusicNameOverlay'
-import { useMusicFromClientQuery, useMusicQuery } from 'src/graphql/generated/types-and-hooks'
 import { HEADER_HEIGHT, MOBILE_MIN_WIDTH } from 'src/models/constants'
 import { formatNumber, getBlackOrWhiteTextColorFrom } from 'src/utils/commons'
 import styled from 'styled-components'
@@ -89,7 +87,6 @@ function MusicDetailPage() {
   const { id, title } = router.query
 
   const music = useReactiveVar(musicsVar)[`${id}`] as any
-  console.log(music)
 
   return (
     <PageTitle title={`Icezam - musics - ${music.title}`}>

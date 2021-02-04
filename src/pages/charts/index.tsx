@@ -1,6 +1,6 @@
 import Skeleton from '@material-ui/lab/Skeleton'
 import Image from 'next/image'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
 import ChartMusicList from 'src/components/ChartMusicList'
@@ -165,7 +165,6 @@ function ChartsPage({ chartCountryList }: Props) {
         return acc
       }, {})
       musicsVar({ ...musicsVar(), ...newMusics })
-      console.log(musicsVar())
     } else {
       setHasMoreItems(false)
     }
