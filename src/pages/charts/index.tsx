@@ -1,35 +1,33 @@
-import styled from 'styled-components'
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import Skeleton from '@material-ui/lab/Skeleton'
 import Image from 'next/image'
-import { fetchChartList, fetchChartTrack } from '../../utils/commons'
-
+import { useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroller'
+import styled from 'styled-components'
+import ChartMusicList from 'src/components/ChartMusicList'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import { HEADER_HEIGHT } from 'src/models/constants'
+import { fetchChartCountryList, fetchChartTrackList } from '../../utils/commons'
 
-import InfiniteScroll from 'react-infinite-scroller'
-import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
-import Skeleton from '@material-ui/lab/Skeleton'
+const GridContainerTop = styled.div`
+  height: 60vh;
+  padding: ${HEADER_HEIGHT} 0 0 2%;
+  background: linear-gradient(to bottom, #0bf, #ecd5ec);
 
-const PaddingTop = styled.div`
-  padding-top: ${HEADER_HEIGHT};
-`
-const ParentContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 3fr 1fr;
-  padding-left: 2%;
-  height: 60vh;
-  background: linear-gradient(to bottom, #0bf, #ecd5ec);
 `
+
 const SelectFlex = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   padding-top: 15px;
 `
+
 const MainGrid = styled.div`
+  margin: 1rem;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 10px;
@@ -71,6 +69,7 @@ const FirstTitle = styled.div`
   font-weight: bold;
   font-size: 1.5rem;
 `
+
 const SecondTitle = styled.div`
   display: flex;
   color: #ffffff;
@@ -86,101 +85,26 @@ const Icon = styled.div`
   justify-content: center;
 `
 
-const List = styled.ol`
-  list-style-type: none;
-  vertical-align: baseline;
-  padding-top: 30px;
-`
-const ListItem = styled.li`
-  display: list-item;
-  font-weight: bold;
-  font-size: 1rem;
-  min-width: 256px;
-  border-bottom: 2px solid #d6d4d4;
-  /* margin-right: -4px; */
-  padding: 25px;
-  :hover {
-    background-color: #eeecec;
-    transition: all 0.2s;
-  }
-`
-const Title = styled.span`
-  padding-left: 20px;
-  font-size: 1.1rem;
-  color: black;
-  white-space: wrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  :hover {
-    color: blue;
-  }
-`
-const SubTitle = styled.span`
-  color: gray;
-  white-space: wrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
-
-const Rank = styled.div`
-  color: black;
-  padding-right: 30px;
-  font-size: 25px;
-  white-space: nowrap;
-`
-
-const FlexContainerRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-`
-
-const ThumbNail = styled.img`
-  vertical-align: middle;
-  padding-left: 10;
-  width: 90px;
-  height: 90px;
-  border-radius: 10%;
-  border: 1px solid #3a3939;
-`
-
-const CommentChip = styled.div`
-  display: inline-block;
-  white-space: nowrap;
-  margin-left: auto;
-  padding: 0 25px;
-  height: 50px;
-  font-size: 0.5rem;
-  line-height: 50px;
-  border-radius: 25px;
-  background-color: #f1f1f1;
-`
-
-const Container = styled.div`
+const GridContainerMusicList = styled.div`
   display: grid;
-  /* border: 3px solid red; */
   grid-template-columns: 0.55fr minmax(0, 0.45fr);
   @media screen and (max-width: 960px) {
     grid-template-columns: 1fr;
   }
   grid-gap: 30px;
 `
-const LeftWrapper = styled.div`
+
+const FlexContainerLeft = styled.div`
   display: flex;
-  flex-wrap: nowrap;
-  flex-direction: column;
+  flex-flow: column nowrap;
   align-items: stretch;
-  /* border: 2px solid blue; */
 `
 
-const RightWrapper = styled.div`
-  display: flex;
+const FlexContainerRight = styled.div`
   padding-top: 10%;
-  flex-wrap: nowrap;
+  display: flex;
+  flex-flow: column nowrap;
   align-items: center;
-  flex-direction: column;
-  /* border: 2px solid blue; */
 
   @media screen and (max-width: 960px) {
     display: none;
@@ -197,6 +121,12 @@ const CoverArt = styled.img`
     box-shadow: 0 0 3px 2px rgba(0, 140, 186, 0.5);
     transition: all 0.3s;
   }
+`
+
+
+const Padding = styled.div`
+  padding: ${HEADER_HEIGHT} 0 0 0;
+  background: linear-gradient(to bottom, #0bf, #ecd5ec);
 `
 
 const FlexSkeletonRow = styled.div`
@@ -219,62 +149,25 @@ const GridSkeletonItem = styled.div`
 `
 
 type Props = {
-  track: {
-    id: string
-    title: string
-    subtitle: string
-    images: {
-      coverart: string
-    }
+  chartCountryList: {
+    countries: {
+      id: number
+      name: string
+    }[]
+    message: string
   }
-  index: number
 }
 
-function RenderItems({ track, index }: Props) {
-  return (
-    <Link href="/music/">
-      <a href="/music/1">
-        <ListItem>
-          <FlexContainerRow>
-            <Rank>{index}</Rank>
-            {track ? (
-              <ThumbNail
-                src={
-                  track.images
-                    ? track.images.coverart
-                      ? track.images.coverart
-                      : '/icezam-logo.png'
-                    : '/icezam-logo.png'
-                }
-              />
-            ) : null}
-            <Title>
-              {track.title} <br /> <SubTitle>{track.subtitle}</SubTitle>
-            </Title>
-            <CommentChip>
-              <TextsmsOutlinedIcon />
-              반응보기
-            </CommentChip>
-          </FlexContainerRow>
-        </ListItem>
-      </a>
-    </Link>
-  )
-}
-
-function ChartsPage() {
+function ChartsPage({ chartCountryList }: Props) {
   const [countryCode, setCountryCode] = useState('KR')
-  const [chartList, setChartList] = useState<any>()
-
   const [startFrom, setStartFrom] = useState(0)
   const [musicList, setMusicList] = useState<any[]>([])
   const [hasMoreItem, setHasMoreItems] = useState(true)
 
   async function handleLoadMore() {
-    const response = await fetchChartTrack(countryCode, startFrom)
-    const page = response.tracks
+    const response = await fetchChartTrackList(countryCode, startFrom)
     if (startFrom < 200) {
-      setMusicList([...musicList, ...page])
+      setMusicList([...musicList, ...response.tracks])
       setStartFrom((prev) => prev + 20)
     } else {
       setHasMoreItems(false)
@@ -287,25 +180,23 @@ function ChartsPage() {
     setMusicList([])
   }
 
-  const handleDelete = () => {
-    console.info('You clicked the delete icon.')
+  if (!chartCountryList.countries) {
+    return (
+      <PageTitle title="Icecream Music - Error">
+        <PageLayout>
+          <Padding>{chartCountryList.message}</Padding>
+        </PageLayout>
+      </PageTitle>
+    )
   }
-
-  useEffect(() => {
-    ;(async () => {
-      const result = await fetchChartList()
-      setChartList(result)
-    })()
-  }, [])
 
   return (
     <PageTitle title="Icecream Music - Charts">
       <PageLayout>
-        <ParentContainer>
-          <PaddingTop />
+        <GridContainerTop>
           <SelectFlex>
             <Select value={countryCode} onChange={handleChange}>
-              {(chartList?.countries as any[])?.map((country) => (
+              {chartCountryList.countries.map((country) => (
                 <Option key={country.id} value={country.id}>
                   {country.name}
                 </Option>
@@ -322,9 +213,9 @@ function ChartsPage() {
               <FirstTitle>이번 주에 {countryCode}에서 가장 많이 icezam된 트랙</FirstTitle>
             </TitleFlex>
           </MainGrid>
-        </ParentContainer>
-        <Container>
-          <LeftWrapper>
+        </GridContainerTop>
+        <GridContainerMusicList>
+          <FlexContainerLeft>
             <InfiniteScroll
               loadMore={handleLoadMore}
               hasMore={hasMoreItem}
@@ -344,24 +235,30 @@ function ChartsPage() {
                 </div>
               }
             >
-              <List>
-                {musicList?.map((track, index) => (
-                  <RenderItems key={track.key} index={index + 1} track={track} />
-                ))}
-              </List>
+              <ChartMusicList musicList={musicList} />
             </InfiniteScroll>
-          </LeftWrapper>
-          <RightWrapper>
+          </FlexContainerLeft>
+          <FlexContainerRight>
             {startFrom > 0 ? (
               <CoverArt src={musicList[0]?.share.image} alt="coverart" />
             ) : (
               <Skeleton variant="rect" width="80%" height="100%" />
             )}
-          </RightWrapper>
-        </Container>
+          </FlexContainerRight>
+        </GridContainerMusicList>
       </PageLayout>
     </PageTitle>
   )
+}
+
+export async function getStaticProps() {
+  const chartCountryList = await fetchChartCountryList()
+
+  return {
+    props: {
+      chartCountryList,
+    },
+  }
 }
 
 export default ChartsPage
