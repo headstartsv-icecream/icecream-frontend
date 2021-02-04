@@ -96,7 +96,7 @@ function MusicDetailPage() {
           <StyledImage src={dummy.albumImage} alt="music cover" />
 
           <MusicInformation>
-            <h1>{dummy.title}</h1>
+            <h1>{title}</h1>
             <>
               {dummy.artists.map((artist) => (
                 <Link key={artist.id} href={`/artists/${artist.id}`}>
