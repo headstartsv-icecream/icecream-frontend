@@ -13,7 +13,7 @@ const GridContainerTop = styled.div`
   height: 60vh;
   padding: ${HEADER_HEIGHT} 0 0 2%;
   background: linear-gradient(to bottom, #0bf, #ecd5ec);
-
+  min-height: 330px;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 3fr 1fr;
@@ -122,7 +122,6 @@ const CoverArt = styled.img`
     transition: all 0.3s;
   }
 `
-
 
 const Padding = styled.div`
   padding: ${HEADER_HEIGHT} 0 0 0;
