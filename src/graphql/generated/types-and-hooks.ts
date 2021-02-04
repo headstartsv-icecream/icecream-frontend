@@ -82,16 +82,24 @@ export type MusicCreationModificationInput = {
   includedPlaylists?: Maybe<Array<Scalars['ID']>>
 }
 
+export type Artist = {
+  __typename?: 'Artist'
+  id: Scalars['ID']
+  name: Scalars['String']
+}
+
 export enum CrawlingSource {
   Youtube = 'YOUTUBE',
   Melon = 'MELON',
+  Icezam = 'ICEZAM',
 }
 
 export type Comment = {
   __typename?: 'Comment'
   id: Scalars['ID']
   creationDate: Scalars['DateTime']
-  crawlingDate: Scalars['DateTime']
+  modificationDate: Scalars['DateTime']
+  writingDate: Scalars['String']
   content: Scalars['String']
   userName: Scalars['String']
   source: CrawlingSource
@@ -101,6 +109,7 @@ export type Comment = {
 export type Music = {
   __typename?: 'Music'
   id: Scalars['ID']
+  creationDate: Scalars['DateTime']
   title: Scalars['String']
   artists: Array<Scalars['String']>
   searchCount: Scalars['Int']
@@ -126,6 +135,7 @@ export type Music = {
 export type Playlist = {
   __typename?: 'Playlist'
   id: Scalars['ID']
+  creationDate: Scalars['DateTime']
   name: Scalars['String']
   musics?: Maybe<Array<Music>>
 }
@@ -207,7 +217,8 @@ export type MusicQuery = { __typename?: 'Query' } & {
               Comment,
               | 'id'
               | 'creationDate'
-              | 'crawlingDate'
+              | 'modificationDate'
+              | 'writingDate'
               | 'content'
               | 'userName'
               | 'source'
@@ -306,7 +317,8 @@ export const MusicDocument = gql`
       comments {
         id
         creationDate
-        crawlingDate
+        modificationDate
+        writingDate
         content
         userName
         source

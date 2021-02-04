@@ -19,7 +19,8 @@ query Music($id: ID!) {
     comments {
       id
       creationDate
-      crawlingDate
+      modificationDate
+      writingDate
       content
       userName
       source
