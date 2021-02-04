@@ -2,10 +2,10 @@ import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
 import Link from 'next/link'
 import styled from 'styled-components'
 
-const List = styled.ol`
+const OrderedList = styled.ol`
+  padding: 0;
   list-style-type: none;
   vertical-align: baseline;
-  padding-top: 30px;
 `
 
 const ListItem = styled.li`
@@ -89,7 +89,7 @@ type Props = {
 
 function ChartMusicList({ musicList }: Props) {
   return (
-    <List>
+    <OrderedList>
       {musicList.map((music, index) => (
         <Link key={music.key} href={`/musics/${music.key}/${music.title}`}>
           <a href={`/musics/${music.key}/${music.title}`}>
@@ -119,7 +119,7 @@ function ChartMusicList({ musicList }: Props) {
           </a>
         </Link>
       ))}
-    </List>
+    </OrderedList>
   )
 }
 
