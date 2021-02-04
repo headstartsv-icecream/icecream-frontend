@@ -89,17 +89,17 @@ function MusicDetailPage() {
   const music = useReactiveVar(musicsVar)[`${id}`] as any
 
   return (
-    <PageTitle title={`Icezam - musics - ${music.title}`}>
+    <PageTitle title={`Icezam - musics - ${title}`}>
       <PageLayout>
         <MusicNameOverlay backgroundColor={'#c8bebb'} musicName={title as string} />
         <FlexContainer backgroundColor={'#c8bebb'}>
-          <StyledImage src={music.images.coverart} alt="music cover" />
+          <StyledImage src={music?.images.coverart} alt="music cover" />
 
           <MusicInformation>
             <h1>{title}</h1>
-            <h3>{music.subtitle}</h3>
+            <h3>{music?.subtitle}</h3>
 
-            <div>{music.genres?.primary}</div>
+            <div>{music?.genres?.primary}</div>
             <div>Icezam {formatNumber(dummy.searchCount)}회</div>
           </MusicInformation>
         </FlexContainer>
