@@ -1,9 +1,11 @@
+import { useReactiveVar } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { musicsVar } from 'src/apollo/cache'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import MusicNameOverlay from 'src/components/MusicNameOverlay'
-import { useMusicQuery } from 'src/graphql/generated/types-and-hooks'
+import { useMusicFromClientQuery, useMusicQuery } from 'src/graphql/generated/types-and-hooks'
 import { HEADER_HEIGHT, MOBILE_MIN_WIDTH } from 'src/models/constants'
 import { formatNumber, getBlackOrWhiteTextColorFrom } from 'src/utils/commons'
 import styled from 'styled-components'
@@ -86,30 +88,21 @@ function MusicDetailPage() {
   const router = useRouter()
   const { id, title } = router.query
 
-  const { data, error, loading } = useMusicQuery({ variables: { id: id as string } })
+  const music = useReactiveVar(musicsVar)[`${id}`] as any
+  console.log(music)
 
   return (
-    <PageTitle title="Icezam - My Page">
+    <PageTitle title={`Icezam - musics - ${music.title}`}>
       <PageLayout>
         <MusicNameOverlay backgroundColor={'#c8bebb'} musicName={title as string} />
         <FlexContainer backgroundColor={'#c8bebb'}>
-          <StyledImage src={dummy.albumImage} alt="music cover" />
+          <StyledImage src={music.images.coverart} alt="music cover" />
 
           <MusicInformation>
             <h1>{title}</h1>
-            <>
-              {dummy.artists.map((artist) => (
-                <Link key={artist.id} href={`/artists/${artist.id}`}>
-                  <a href={`/artists/${artist.id}`}>{artist.name}</a>
-                </Link>
-              ))}
-            </>
+            <h3>{music.subtitle}</h3>
 
-            <div>
-              {dummy.genres.map((genre) => (
-                <div key={genre}>{genre}</div>
-              ))}
-            </div>
+            <div>{music.genres?.primary}</div>
             <div>Icezam {formatNumber(dummy.searchCount)}회</div>
           </MusicInformation>
         </FlexContainer>
