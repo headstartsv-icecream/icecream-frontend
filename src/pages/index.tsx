@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
+import { musicsVar } from 'src/apollo/cache'
 import DragDrop from 'src/components/atoms/DragDrop'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
@@ -100,19 +101,25 @@ function HomePage() {
     if (musicInfo) {
       console.log(musicInfo)
 
-      const input = { shazamId: `${musicInfo.track.key}`, title: musicInfo.track.title }
-      createOrModifyMusic({ variables: { input } })
+      const newMusics = { ...musicsVar() }
+      newMusics[`${musicInfo.track.key}`] = musicInfo.track
+      musicsVar(newMusics)
+
+      router.push(`/musics/${musicInfo.track.key}/${musicInfo.track.title}`)
+
+      // const input = { shazamId: `${musicInfo.track.key}`, title: musicInfo.track.title }
+      // createOrModifyMusic({ variables: { input } })
     } else if (musicInfo === null) {
       openSearchFailureToast()
     }
-  }, [createOrModifyMusic, musicInfo, openSearchFailureToast])
+  }, [createOrModifyMusic, musicInfo, openSearchFailureToast, router])
 
-  useEffect(() => {
-    if (data) {
-      const { id, title } = data.createOrModifyMusic
-      router.push(`/musics/${id}/${title}`)
-    }
-  }, [data, router])
+  // useEffect(() => {
+  //   if (data) {
+  //     const { id, title } = data.createOrModifyMusic
+  //     router.push(`/musics/${id}/${title}`)
+  //   }
+  // }, [data, router])
 
   return (
     <PageTitle title="Icezam - 음악을 검색하고, 음악에 대한 다양한 사람들의 반응을 알아보는 공간">
