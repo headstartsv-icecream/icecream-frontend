@@ -1,6 +1,6 @@
 import Skeleton from '@material-ui/lab/Skeleton'
 import Image from 'next/image'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
 import ChartMusicList from 'src/components/ChartMusicList'
@@ -8,34 +8,25 @@ import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import { HEADER_HEIGHT } from 'src/models/constants'
 import { fetchChartCountryList, fetchChartTrackList } from '../../utils/commons'
+import { musicsVar } from 'src/apollo/cache'
 
 const GridContainerTop = styled.div`
   height: 60vh;
   padding: ${HEADER_HEIGHT} 0 0 2%;
   background: linear-gradient(to bottom, #0bf, #ecd5ec);
-
+  min-height: 330px;
   display: grid;
-  grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 3fr 1fr;
 `
 
-const SelectFlex = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-top: 15px;
-`
-
-const MainGrid = styled.div`
-  margin: 1rem;
+const GridContainer = styled.div`
+  padding: 1rem;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 10px;
 `
 
 const Select = styled.select`
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
 
   height: 3rem;
@@ -58,13 +49,12 @@ const Option = styled.option`
 const TitleFlex = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   justify-content: center;
+  align-items: flex-start;
 `
 
 const FirstTitle = styled.div`
   display: flex;
-  flex-direction: row;
   color: #ffffff;
   font-weight: bold;
   font-size: 1.5rem;
@@ -95,13 +85,14 @@ const GridContainerMusicList = styled.div`
 `
 
 const FlexContainerLeft = styled.div`
+  padding: 1rem;
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
 `
 
 const FlexContainerRight = styled.div`
-  padding-top: 10%;
+  padding: 2rem 0 0 0;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -117,24 +108,24 @@ const CoverArt = styled.img`
   position: sticky;
   top: 100px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
   :hover {
     box-shadow: 0 0 3px 2px rgba(0, 140, 186, 0.5);
     transition: all 0.3s;
   }
 `
 
-
 const Padding = styled.div`
   padding: ${HEADER_HEIGHT} 0 0 0;
   background: linear-gradient(to bottom, #0bf, #ecd5ec);
 `
 
-const FlexSkeletonRow = styled.div`
-  padding-left: 8%;
+const FlexContainer = styled.div`
+  padding: 1rem;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  align-items: center;
 `
+
 const GridSkeleton = styled.div`
   display: grid;
   padding-left: 5%;
@@ -145,7 +136,6 @@ const GridSkeleton = styled.div`
 
 const GridSkeletonItem = styled.div`
   display: flex;
-  flex-direction: row;
 `
 
 type Props = {
@@ -169,12 +159,18 @@ function ChartsPage({ chartCountryList }: Props) {
     if (startFrom < 200) {
       setMusicList([...musicList, ...response.tracks])
       setStartFrom((prev) => prev + 20)
+
+      const newMusics = response.tracks.reduce((acc: any, track: any) => {
+        acc[`${track.key}`] = track
+        return acc
+      }, {})
+      musicsVar({ ...musicsVar(), ...newMusics })
     } else {
       setHasMoreItems(false)
     }
   }
 
-  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
+  function handleChange(event: ChangeEvent<HTMLSelectElement>) {
     setCountryCode(event.target.value)
     setStartFrom(0)
     setMusicList([])
@@ -194,7 +190,7 @@ function ChartsPage({ chartCountryList }: Props) {
     <PageTitle title="Icecream Music - Charts">
       <PageLayout>
         <GridContainerTop>
-          <SelectFlex>
+          <FlexContainer>
             <Select value={countryCode} onChange={handleChange}>
               {chartCountryList.countries.map((country) => (
                 <Option key={country.id} value={country.id}>
@@ -202,8 +198,8 @@ function ChartsPage({ chartCountryList }: Props) {
                 </Option>
               ))}
             </Select>
-          </SelectFlex>
-          <MainGrid>
+          </FlexContainer>
+          <GridContainer>
             <Icon>
               <Image src="/play-circle-regular.svg" alt="play-button" width={80} height={80} />
             </Icon>
@@ -212,7 +208,7 @@ function ChartsPage({ chartCountryList }: Props) {
               <SecondTitle>Top 200</SecondTitle>
               <FirstTitle>이번 주에 {countryCode}에서 가장 많이 icezam된 트랙</FirstTitle>
             </TitleFlex>
-          </MainGrid>
+          </GridContainer>
         </GridContainerTop>
         <GridContainerMusicList>
           <FlexContainerLeft>
@@ -220,19 +216,17 @@ function ChartsPage({ chartCountryList }: Props) {
               loadMore={handleLoadMore}
               hasMore={hasMoreItem}
               loader={
-                <div className="loader" key={0}>
-                  <FlexSkeletonRow>
-                    <Skeleton variant="rect" width={90} height={90} />
-                    <GridSkeleton>
-                      <GridSkeletonItem>
-                        <Skeleton width="80%" />
-                      </GridSkeletonItem>
-                      <GridSkeletonItem>
-                        <Skeleton width="50%" />
-                      </GridSkeletonItem>
-                    </GridSkeleton>
-                  </FlexSkeletonRow>
-                </div>
+                <FlexContainer key={0}>
+                  <Skeleton variant="rect" width={90} height={90} />
+                  <GridSkeleton>
+                    <GridSkeletonItem>
+                      <Skeleton width="80%" />
+                    </GridSkeletonItem>
+                    <GridSkeletonItem>
+                      <Skeleton width="50%" />
+                    </GridSkeletonItem>
+                  </GridSkeleton>
+                </FlexContainer>
               }
             >
               <ChartMusicList musicList={musicList} />

@@ -1,11 +1,11 @@
 import TextsmsOutlinedIcon from '@material-ui/icons/TextsmsOutlined'
-import Link from 'antd/lib/typography/Link'
+import Link from 'next/link'
 import styled from 'styled-components'
 
-const List = styled.ol`
+const OrderedList = styled.ol`
+  padding: 0;
   list-style-type: none;
   vertical-align: baseline;
-  padding-top: 30px;
 `
 
 const ListItem = styled.li`
@@ -78,7 +78,6 @@ const CommentChip = styled.div`
 
 type Props = {
   musicList: {
-    id: string
     key: string
     title: string
     subtitle: string
@@ -90,26 +89,26 @@ type Props = {
 
 function ChartMusicList({ musicList }: Props) {
   return (
-    <List>
-      {musicList.map((track, index) => (
-        <Link key={track.id} href={`/musics/${track.id}`}>
-          <a href={`/musics/${track.id}`}>
+    <OrderedList>
+      {musicList.map((music, index) => (
+        <Link key={music.key} href={`/musics/${music.key}/${music.title}`}>
+          <a href={`/musics/${music.key}/${music.title}`}>
             <ListItem>
               <FlexContainerRow>
                 <Rank>{index + 1}</Rank>
-                {track ? (
+                {music ? (
                   <ThumbNail
                     src={
-                      track.images
-                        ? track.images.coverart
-                          ? track.images.coverart
+                      music.images
+                        ? music.images.coverart
+                          ? music.images.coverart
                           : '/icezam-logo.png'
                         : '/icezam-logo.png'
                     }
                   />
                 ) : null}
                 <Title>
-                  {track.title} <br /> <SubTitle>{track.subtitle}</SubTitle>
+                  {music.title} <br /> <SubTitle>{music.subtitle}</SubTitle>
                 </Title>
                 <CommentChip>
                   <TextsmsOutlinedIcon />
@@ -120,7 +119,7 @@ function ChartMusicList({ musicList }: Props) {
           </a>
         </Link>
       ))}
-    </List>
+    </OrderedList>
   )
 }
 
