@@ -78,7 +78,6 @@ const CommentChip = styled.div`
 
 type Props = {
   musicList: {
-    id: string
     key: string
     title: string
     subtitle: string
