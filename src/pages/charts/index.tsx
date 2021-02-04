@@ -14,7 +14,7 @@ const GridContainerTop = styled.div`
   height: 60vh;
   padding: ${HEADER_HEIGHT} 0 0 2%;
   background: linear-gradient(to bottom, #0bf, #ecd5ec);
-
+  min-height: 330px;
   display: grid;
   grid-template-rows: 1fr 1fr 3fr 1fr;
 `
