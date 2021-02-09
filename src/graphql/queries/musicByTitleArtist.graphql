@@ -1,5 +1,13 @@
 query MusicByTitleArtist($title: String!, $artist: [String!]) {
   musicByTitleArtist(title: $title, artist: $artist) {
     id
+    comments {
+      id
+      modificationDate
+      writingDate
+      content
+      userName
+      source
+    }
   }
 }

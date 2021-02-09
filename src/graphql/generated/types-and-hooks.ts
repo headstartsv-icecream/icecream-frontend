@@ -242,7 +242,18 @@ export type MusicByTitleArtistQueryVariables = Exact<{
 }>
 
 export type MusicByTitleArtistQuery = { __typename?: 'Query' } & {
-  musicByTitleArtist?: Maybe<{ __typename?: 'Music' } & Pick<Music, 'id'>>
+  musicByTitleArtist?: Maybe<
+    { __typename?: 'Music' } & Pick<Music, 'id'> & {
+        comments?: Maybe<
+          Array<
+            { __typename?: 'Comment' } & Pick<
+              Comment,
+              'id' | 'modificationDate' | 'writingDate' | 'content' | 'userName' | 'source'
+            >
+          >
+        >
+      }
+  >
 }
 
 export const CreateOrModifyMusicDocument = gql`
@@ -370,6 +381,14 @@ export const MusicByTitleArtistDocument = gql`
   query MusicByTitleArtist($title: String!, $artist: [String!]) {
     musicByTitleArtist(title: $title, artist: $artist) {
       id
+      comments {
+        id
+        modificationDate
+        writingDate
+        content
+        userName
+        source
+      }
     }
   }
 `

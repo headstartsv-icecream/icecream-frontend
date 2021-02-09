@@ -4,11 +4,12 @@ import { musicsVar } from 'src/apollo/cache'
 import PageLayout from 'src/components/layouts/PageLayout'
 import PageTitle from 'src/components/layouts/PageTitle'
 import MusicNameOverlay from 'src/components/MusicNameOverlay'
+import { useMusicByTitleArtistQuery } from 'src/graphql/generated/types-and-hooks'
 import { HEADER_HEIGHT, MOBILE_MIN_WIDTH } from 'src/models/constants'
 import { formatNumber, getBlackOrWhiteTextColorFrom } from 'src/utils/commons'
 import styled from 'styled-components'
 
-const FlexContainer = styled.div<{ backgroundColor: string }>`
+const FlexContainerMusicInfo = styled.div<{ backgroundColor: string }>`
   width: 100%;
   padding: ${HEADER_HEIGHT} 0 0 0;
   position: relative;
@@ -82,17 +83,30 @@ const dummy = {
   ],
 }
 
+const FlexContainerComments = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+`
+
 function MusicDetailPage() {
   const router = useRouter()
   const { id, title } = router.query
 
   const music = useReactiveVar(musicsVar)[`${id}`] as any
 
+  const { data, error, loading } = useMusicByTitleArtistQuery({
+    variables: { title: `${title}`, artist: music?.subtitle ?? '' },
+  })
+
+  const comments = data?.musicByTitleArtist?.comments
+
   return (
     <PageTitle title={`Icezam - musics - ${title}`}>
       <PageLayout>
         <MusicNameOverlay backgroundColor={'#c8bebb'} musicName={title as string} />
-        <FlexContainer backgroundColor={'#c8bebb'}>
+        <FlexContainerMusicInfo backgroundColor={'#c8bebb'}>
           <StyledImage src={music?.images.coverart} alt="music cover" />
 
           <MusicInformation>
@@ -100,9 +114,23 @@ function MusicDetailPage() {
             <h3>{music?.subtitle}</h3>
 
             <div>{music?.genres?.primary}</div>
-            <div>Icezam {formatNumber(dummy.searchCount)}회</div>
+            <div>Icezam 1 회</div>
           </MusicInformation>
-        </FlexContainer>
+        </FlexContainerMusicInfo>
+        <FlexContainerComments>
+          {comments ? (
+            comments.map((comment) => (
+              <div key={comment.id}>
+                <div>수정일 : {new Date(comment.modificationDate)}</div>
+                <div>사용자 이름 : {comment.userName}</div>
+                <div>출처 : {comment.source}</div>
+                <div>{comment.content}</div>
+              </div>
+            ))
+          ) : (
+            <h3>댓글이 아직 없어요</h3>
+          )}
+        </FlexContainerComments>
       </PageLayout>
     </PageTitle>
   )
